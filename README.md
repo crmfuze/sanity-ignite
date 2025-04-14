@@ -27,7 +27,7 @@ This will install your NPM dependencies and populate the `.env.local` file.
 ### 2. Start the Development Server
 
 ```bash
-npm run dev
+yarn run dev
 ```
 
 ### 3. Open the Project and sign in to Sanity
