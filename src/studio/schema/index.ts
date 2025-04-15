@@ -10,6 +10,7 @@ import postList from './objects/sections/postList';
 import cardGrid from './objects/sections/cardGrid';
 import settings from './singletons/settings';
 import blockContent from './objects/blockContent';
+import blockContentSection from './objects/sections/blockContent';
 import link from './objects/link';
 import button from './objects/button';
 import blogPage from './singletons/blogPage';
@@ -40,6 +41,7 @@ export const schemaTypes = [
   cardGrid,
   divider,
   subscribe,
+  blockContentSection,
 
   // Objects
   blockContent,

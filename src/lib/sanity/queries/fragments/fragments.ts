@@ -214,6 +214,14 @@ export const cardGridFragment = /* groq */ `
   icon,
 `;
 
+export const blockContentSectionFragment = /* groq */ `
+  _type,
+  content[]{
+    ...,
+    ${markDefsFragment}
+  },
+`;
+
 export const cardGridsSectionFragment = /* groq */ `
   ${cardGridFragment}
   cards[]{
@@ -226,6 +234,7 @@ export const pageBuilderFragment = /* groq */ `
     ...,
     _key,
     _type,
+    _type == 'blockContentSection' => {${blockContentSectionFragment}},
     _type == 'cardGrid' => {${cardGridsSectionFragment}},
     _type == 'cta' => {${ctaSectionFragment}},
     _type == 'divider' => {${dividerSectionFragment}},
