@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
-import { FaShoppingCart, FaUser, FaEnvelope } from 'react-icons/fa';
+import { FaShoppingCart, FaUser } from 'react-icons/fa';
 import { FiMenu, FiX } from 'react-icons/fi';
 import { SettingsQueryResult } from '@/sanity.types';
 import { getLinkByLinkObject } from '@/lib/links';
@@ -20,7 +20,7 @@ export default function NavBar({
 
   // Icons
   const icons = [
-    { icon: FaEnvelope, label: 'Contact' },
+    // { icon: FaEnvelope, label: 'Contact' },
     { icon: FaShoppingCart, label: 'Cart' },
     { icon: FaUser, label: 'User' },
   ];
@@ -61,19 +61,6 @@ export default function NavBar({
 
           {/* Button and Icons */}
           <div className="hidden lg:flex items-center space-x-6">
-            {/* Join Now Button */}
-            <Link
-              href="/JoinUs"
-              className="font-inter font-bold text-[12px] sm:text-[14px] leading-[20px] sm:leading-[24px] tracking-[0px] text-center bg-[#4ACAC6] text-white px-4 py-1 sm:px-6 sm:py-2 rounded-[30px] hover:bg-[#3aa8a5] transition-colors duration-300 whitespace-nowrap"
-            >
-              Join now!
-            </Link>
-
-            {/* Flag Image */}
-            <div className="flex-shrink-0">
-              <Image src="/images/gb 1.svg" alt="Flag" width={24} height={16} />
-            </div>
-
             {/* Icons with Borders */}
             <div className="flex items-center space-x-4">
               {icons.map((IconComponent, index) => (
@@ -130,29 +117,19 @@ export default function NavBar({
 
           {/* Flag and Icons */}
           <li>
-            <div className="flex space-x-4 px-3 py-2">
-              {/* Flag Image */}
-              <div className="flex-shrink-0">
-                <Image src="/images/gb 1.svg" alt="Flag" width={24} height={16} />
-              </div>
-
-              {/* Icons */}
-              {icons.map((IconComponent, index) => (
-                <IconComponent.icon
-                  key={index}
-                  className="h-6 w-6 text-[#434343] hover:text-[#9B37AE] cursor-pointer"
-                />
-              ))}
-            </div>
-          </li>
-
-          {/* Join Now Button */}
-          <li>
             <Link
-              href="/JoinUs"
-              className="block px-3 py-2 font-inter font-bold text-[14px] leading-[24px] tracking-[0px] text-center bg-[#4ACAC6] text-white rounded-[30px] hover:bg-[#3aa8a5] transition-colors duration-300"
+              href="/account"
+              className="block hover:bg-gray-200 px-3 py-2 rounded-md font-poppins font-semibold text-[14px] leading-[21px] tracking-[0px] text-[#434343] hover:text-[#9B37AE] hover:underline"
+              onClick={() => setIsMobileMenuOpen(false)}
             >
-              Join now!
+              Account
+            </Link>
+            <Link
+              href="/cart"
+              className="block hover:bg-gray-200 px-3 py-2 rounded-md font-poppins font-semibold text-[14px] leading-[21px] tracking-[0px] text-[#434343] hover:text-[#9B37AE] hover:underline"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Cart
             </Link>
           </li>
         </ul>
