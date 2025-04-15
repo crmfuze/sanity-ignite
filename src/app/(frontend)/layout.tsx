@@ -14,7 +14,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const { isEnabled: isDraftMode } = await draftMode();
 
   return (
-    <body className={`font-inter bg-white text-black`}>
+    <body className={`font-inter bg-white text-black`} suppressHydrationWarning>
       <section className="min-h-screen">
         {/* The <Toaster> component is responsible for rendering toast notifications used in /app/client-utils.ts and /app/components/DraftModeToast.tsx */}
         <Toaster />
