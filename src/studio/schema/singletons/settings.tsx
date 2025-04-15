@@ -22,6 +22,22 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'logo',
+      title: 'Logo',
+      description: 'The main logo of the website',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        {
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+        },
+      ],
+    }),
+    defineField({
       name: 'menu',
       type: 'array',
       of: [{ type: 'menuItem' }],

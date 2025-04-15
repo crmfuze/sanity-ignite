@@ -8,8 +8,9 @@ import {
   postCardFragment,
 } from './fragments/fragments';
 
-export const settingsQuery = defineQuery(`*[_type == "settings"][0]{
+export const settingsQuery = defineQuery(`*[_type == "settings" && _id == "siteSettings"][0]{
   title,
+  logo,
   description,
   ${menuFragment}
 }`);

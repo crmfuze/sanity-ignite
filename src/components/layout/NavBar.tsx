@@ -1,165 +1,162 @@
 'use client';
 
 import Link from 'next/link';
-import { Button } from '../ui/button';
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu';
-import { cn } from '@/lib/utils';
+import Image from 'next/image';
 import { useState } from 'react';
+import { FaShoppingCart, FaUser, FaEnvelope } from 'react-icons/fa';
+import { FiMenu, FiX } from 'react-icons/fi';
 import { SettingsQueryResult } from '@/sanity.types';
 import { getLinkByLinkObject } from '@/lib/links';
+import { urlForImage } from '@/lib/sanity/client/utils';
 
 export default function NavBar({
+  logo,
   menuItems,
 }: {
+  logo: NonNullable<NonNullable<SettingsQueryResult>['logo']>;
   menuItems: NonNullable<NonNullable<SettingsQueryResult>['menu']>;
 }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Icons
+  const icons = [
+    { icon: FaEnvelope, label: 'Contact' },
+    { icon: FaShoppingCart, label: 'Cart' },
+    { icon: FaUser, label: 'User' },
+  ];
+
   return (
-    <div className="flex items-center justify-end flex-1">
-      {/* Desktop Navigation */}
-      <div className="hidden md:flex items-center space-x-6">
-        <NavigationMenu>
-          <NavigationMenuList>
-            {menuItems.map((item) => (
-              <NavigationMenuItem key={item._key}>
-                {item.childMenu ? (
-                  // Dropdown menu for items with children
-                  <>
-                    <NavigationMenuTrigger className={cn(navigationMenuTriggerStyle())}>
-                      {item.text}
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <div className="p-1 w-[200px]">
-                        {item.childMenu.map((child) => (
-                          <NavigationMenuLink key={child._key} asChild>
-                            <Link
-                              href={child.link ? getLinkByLinkObject(child.link) || '#' : '#'}
-                              className="block p-2 hover:bg-gray-100 rounded-md"
-                              {...(child.link?.openInNewTab
-                                ? { target: '_blank', rel: 'noopener noreferrer' }
-                                : {})}
-                            >
-                              {child.text}
-                            </Link>
-                          </NavigationMenuLink>
-                        ))}
-                      </div>
-                    </NavigationMenuContent>
-                  </>
-                ) : (
-                  // Simple link for items without children
-                  <NavigationMenuLink asChild>
-                    <Link
-                      href={item.link ? getLinkByLinkObject(item.link) || '#' : '#'}
-                      className={cn(navigationMenuTriggerStyle(), 'cursor-pointer')}
-                      {...(item.link?.openInNewTab
-                        ? { target: '_blank', rel: 'noopener noreferrer' }
-                        : {})}
-                    >
-                      {item.text}
-                    </Link>
-                  </NavigationMenuLink>
-                )}
-              </NavigationMenuItem>
-            ))}
-          </NavigationMenuList>
-        </NavigationMenu>
-
-        <div className="flex space-x-2">
-          <Button asChild variant="default">
-            <Link href={'/'}>Get Started</Link>
-          </Button>
-          <Button asChild variant="outline">
-            <Link href={'/'}>Log In</Link>
-          </Button>
-        </div>
-      </div>
-
-      {/* Mobile Menu Button */}
-      <button
-        className="md:hidden text-gray-800"
-        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-      >
-        <svg
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d={isMobileMenuOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'}
-          />
-        </svg>
-      </button>
-
-      {/* Mobile Menu */}
-      <div
-        className={cn(
-          'md:hidden absolute top-full left-0 right-0 bg-white shadow-lg z-50 transform transition-all duration-300 ease-in-out origin-top',
-          isMobileMenuOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0',
-        )}
-      >
-        <div className="px-4 py-2">
-          {menuItems.map((item) => (
-            <div key={item._key}>
-              {item.childMenu ? (
-                // Parent item with children
-                <>
-                  <div className="py-2 px-4 font-medium">{item.text}</div>
-                  <div className="pl-4">
-                    {item.childMenu.map((child) => (
-                      <Link
-                        key={child._key}
-                        href={child.link ? getLinkByLinkObject(child.link) || '#' : '#'}
-                        className="block py-2 px-4 hover:bg-gray-100 rounded-md"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        {...(child.link?.openInNewTab
-                          ? { target: '_blank', rel: 'noopener noreferrer' }
-                          : {})}
-                      >
-                        {child.text}
-                      </Link>
-                    ))}
-                  </div>
-                </>
-              ) : (
-                // Single menu item
-                <Link
-                  href={item.link ? getLinkByLinkObject(item.link) || '#' : '#'}
-                  className="block py-2 px-4 hover:bg-gray-100 rounded-md"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  {...(item.link?.openInNewTab
-                    ? { target: '_blank', rel: 'noopener noreferrer' }
-                    : {})}
-                >
-                  {item.text}
-                </Link>
+    <nav className="bg-white shadow-md relative z-10">
+      <div className="main-container">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <Link href="/">
+              {logo?.asset && (
+                <Image
+                  src={urlForImage(logo)?.width(150).height(50).url() as string}
+                  alt={logo?.alt || ''}
+                  width={150}
+                  height={50}
+                />
               )}
+            </Link>
+          </div>
+
+          {/* Nav Links (Desktop) */}
+          <div className="hidden lg:flex space-x-6 items-center">
+            {menuItems.map((item) => (
+              <Link
+                key={item._key}
+                href={item.link ? getLinkByLinkObject(item.link) || '#' : '#'}
+                className="font-poppins font-semibold text-[14px] leading-[21px] tracking-[0px] text-[#434343] hover:text-[#9B37AE] hover:underline"
+                {...(item.link?.openInNewTab
+                  ? { target: '_blank', rel: 'noopener noreferrer' }
+                  : {})}
+              >
+                {item.text}
+              </Link>
+            ))}
+          </div>
+
+          {/* Button and Icons */}
+          <div className="hidden lg:flex items-center space-x-6">
+            {/* Join Now Button */}
+            <Link
+              href="/JoinUs"
+              className="font-inter font-bold text-[12px] sm:text-[14px] leading-[20px] sm:leading-[24px] tracking-[0px] text-center bg-[#4ACAC6] text-white px-4 py-1 sm:px-6 sm:py-2 rounded-[30px] hover:bg-[#3aa8a5] transition-colors duration-300 whitespace-nowrap"
+            >
+              Join now!
+            </Link>
+
+            {/* Flag Image */}
+            <div className="flex-shrink-0">
+              <Image src="/images/gb 1.svg" alt="Flag" width={24} height={16} />
             </div>
-          ))}
-          <div className="flex flex-col space-y-2 mt-4 p-4">
-            <Button asChild variant="default">
-              <Link href={'/'}>Get Started</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href={'/'}>Log In</Link>
-            </Button>
+
+            {/* Icons with Borders */}
+            <div className="flex items-center space-x-4">
+              {icons.map((IconComponent, index) => (
+                <div
+                  key={index}
+                  className={`flex items-center ${
+                    index !== icons.length - 1 ? 'border-r pr-4 border-gray-300' : ''
+                  } ${index !== 0 ? '' : ''}`}
+                >
+                  <IconComponent.icon className="h-6 w-6 text-[#434343] hover:text-[#9B37AE] cursor-pointer" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="lg:hidden flex items-center">
+            <button
+              className="outline-none mobile-menu-button"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? (
+                <FiX className="h-6 w-6 text-gray-700" />
+              ) : (
+                <FiMenu className="h-6 w-6 text-gray-700" />
+              )}
+            </button>
           </div>
         </div>
       </div>
-    </div>
+
+      {/* Mobile Menu (Overlay) */}
+      <div
+        className={`transition-all duration-300 ease-in-out overflow-hidden ${
+          isMobileMenuOpen ? 'max-h-screen' : 'max-h-0'
+        } lg:hidden absolute top-16 left-0 w-full bg-white shadow-md z-20`}
+      >
+        <ul className="px-2 pt-2 pb-3 space-y-2">
+          {/* Navigation Links */}
+          {menuItems.map((item) => (
+            <li key={item._key}>
+              <Link
+                href={item.link ? getLinkByLinkObject(item.link) || '#' : '#'}
+                className="block hover:bg-gray-200 px-3 py-2 rounded-md font-poppins font-semibold text-[14px] leading-[21px] tracking-[0px] text-[#434343] hover:text-[#9B37AE] hover:underline"
+                onClick={() => setIsMobileMenuOpen(false)}
+                {...(item.link?.openInNewTab
+                  ? { target: '_blank', rel: 'noopener noreferrer' }
+                  : {})}
+              >
+                {item.text}
+              </Link>
+            </li>
+          ))}
+
+          {/* Flag and Icons */}
+          <li>
+            <div className="flex space-x-4 px-3 py-2">
+              {/* Flag Image */}
+              <div className="flex-shrink-0">
+                <Image src="/images/gb 1.svg" alt="Flag" width={24} height={16} />
+              </div>
+
+              {/* Icons */}
+              {icons.map((IconComponent, index) => (
+                <IconComponent.icon
+                  key={index}
+                  className="h-6 w-6 text-[#434343] hover:text-[#9B37AE] cursor-pointer"
+                />
+              ))}
+            </div>
+          </li>
+
+          {/* Join Now Button */}
+          <li>
+            <Link
+              href="/JoinUs"
+              className="block px-3 py-2 font-inter font-bold text-[14px] leading-[24px] tracking-[0px] text-center bg-[#4ACAC6] text-white rounded-[30px] hover:bg-[#3aa8a5] transition-colors duration-300"
+            >
+              Join now!
+            </Link>
+          </li>
+        </ul>
+      </div>
+    </nav>
   );
 }
