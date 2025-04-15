@@ -27,7 +27,9 @@ const homeLocation = {
 
 // resolveHref() is a convenience function that resolves the URL
 // path for different document types and used in the presentation tool.
+// It ignores region codes that are added by middleware
 function resolveHref(documentType?: string, slug?: string): string | undefined {
+  // We don't include region code here as it's handled by middleware
   switch (documentType) {
     case 'post':
       return slug ? `/blog/${slug}` : undefined;
@@ -59,11 +61,23 @@ export default defineConfig({
         // The Main Document Resolver API provides a method of resolving a main document from a given route or route pattern. https://www.sanity.io/docs/presentation-resolver-api#57720a5678d9
         mainDocuments: defineDocuments([
           {
-            route: '/:slug',
+            route: '/:countryCode',
+            filter: `_type == "homePage" && _id == "homePage"`,
+          },
+          {
+            route: '/:countryCode/:slug',
             filter: `_type == "page" && slug.current == $slug || _id == $slug`,
           },
           {
-            route: '/blog/:slug',
+            route: '/:countryCode?/:slug',
+            filter: `_type == "page" && slug.current == $slug || _id == $slug`,
+          },
+          {
+            route: '/:countryCode/blog/:slug',
+            filter: `_type == "post" && slug.current == $slug || _id == $slug`,
+          },
+          {
+            route: '/:countryCode?/blog/:slug',
             filter: `_type == "post" && slug.current == $slug || _id == $slug`,
           },
         ]),
