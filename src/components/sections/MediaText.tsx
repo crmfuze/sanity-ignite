@@ -22,7 +22,7 @@ export default function MediaTextSection({ section }: { section: MediaTextSectio
   return (
     <div
       className={cn(
-        'main-container py-10 md:py-14 mx-auto flex flex-col',
+        'content-container py-10 md:py-14 mx-auto flex flex-col',
         isImageRight ? 'lg:flex-row-reverse' : 'lg:flex-row',
       )}
     >

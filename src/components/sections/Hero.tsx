@@ -8,7 +8,7 @@ import type { HeroSection } from './types';
 export default function HeroSection({ section }: { section: HeroSection }) {
   return (
     <section className="bg-[#FEFAFF] py-12">
-      <div className="main-container flex flex-col-reverse lg:flex-row  items-center gap-4  ">
+      <div className="content-container flex flex-col-reverse lg:flex-row  items-center gap-4  ">
         {/* Left Content */}
         <div className="max-w-[600px] w-full text-center lg:text-left ">
           <h2 className="text-[#9B37AE] font-inter font-bold md:text-[45px] md:leading-[55px] text-[30px] leading-[40px] tracking-normal">

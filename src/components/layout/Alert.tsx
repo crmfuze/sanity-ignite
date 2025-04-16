@@ -1,7 +1,7 @@
 export default function Alert() {
   return (
     <div className="bg-gray-100 w-full text-gray-800 text-xs">
-      <div className="main-container mx-auto px-4 py-3 text-center">
+      <div className="content-container mx-auto px-4 py-3 text-center">
         This is a technical demo of Sanity Ignite, a Sanity + Next.js starter kit.{' '}
         <a
           href="https://www.sanity.io/templates/sanity-ignite"

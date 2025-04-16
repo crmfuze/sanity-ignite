@@ -16,7 +16,7 @@ export default async function Footer() {
 
   return (
     <footer className="bg-[#F8F8F8] text-[#434343]">
-      <div className="main-container pt-12 pb-8">
+      <div className="content-container pt-12 pb-8">
         {/* Logo */}
         <div className="flex justify-start mb-4">
           <Image
@@ -35,8 +35,8 @@ export default async function Footer() {
               {footerData?.companyLinks?.sectionTitle}
             </h3>
             <ul className="space-y-1 font-poppins font-normal text-[13px] leading-[30px] tracking-[0px] text-[#434343]">
-              {footerData?.companyLinks?.links?.map(
-                (link, i: number) => link.text && link.url ? (
+              {footerData?.companyLinks?.links?.map((link, i: number) =>
+                link.text && link.url ? (
                   <li key={i}>
                     <Link href={link.url} target={link.isExternal ? '_blank' : '_self'}>
                       {link.text}
@@ -51,8 +51,8 @@ export default async function Footer() {
               {footerData?.ourProductsLinks?.sectionTitle}
             </h3>
             <ul className="space-y-1 font-poppins font-normal text-[13px] leading-[30px] tracking-[0px] text-[#434343]">
-              {footerData?.ourProductsLinks?.links?.map(
-                (link, i: number) => link.text && link.url ? (
+              {footerData?.ourProductsLinks?.links?.map((link, i: number) =>
+                link.text && link.url ? (
                   <li key={i}>
                     <Link href={link.url} target={link.isExternal ? '_blank' : '_self'}>
                       {link.text}
@@ -67,8 +67,8 @@ export default async function Footer() {
               {footerData?.patnerProgramsLinks?.sectionTitle}
             </h3>
             <ul className="space-y-1 font-poppins font-normal text-[13px] leading-[30px] tracking-[0px] text-[#434343]">
-              {footerData?.patnerProgramsLinks?.links?.map(
-                (link, i: number) => link.text && link.url ? (
+              {footerData?.patnerProgramsLinks?.links?.map((link, i: number) =>
+                link.text && link.url ? (
                   <li key={i}>
                     <Link href={link.url} target={link.isExternal ? '_blank' : '_self'}>
                       {link.text}
@@ -83,8 +83,8 @@ export default async function Footer() {
               {footerData?.legalLinks?.sectionTitle}
             </h3>
             <ul className="space-y-1 font-poppins font-normal text-[13px] leading-[30px] tracking-[0px] text-[#434343]">
-              {footerData?.legalLinks?.links?.map(
-                (link, i: number) => link.text && link.url ? (
+              {footerData?.legalLinks?.links?.map((link, i: number) =>
+                link.text && link.url ? (
                   <li key={i}>
                     <Link href={link.url} target={link.isExternal ? '_blank' : '_self'}>
                       {link.text}
@@ -98,8 +98,8 @@ export default async function Footer() {
           <div className="flex flex-col md:col-span-1 col-span-2 items-end">
             {/* Social Media Icons */}
             <div className="flex justify-end space-x-4 md:mt-4 mt-8">
-              {footerData?.socialLinks?.links?.map(
-                (link, i: number) => link?.url ? (
+              {footerData?.socialLinks?.links?.map((link, i: number) =>
+                link?.url ? (
                   <Link key={i} href={link.url} target={link.isExternal ? '_blank' : '_self'}>
                     <Image
                       src={link?.image?.asset?.url || ''}

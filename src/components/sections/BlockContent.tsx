@@ -15,7 +15,7 @@ export default function BlockContent({ section }: BlockContentProps) {
   }
 
   return (
-    <div className="main-container mx-auto py-8 md:py-12">
+    <div className="content-container mx-auto py-8 md:py-12">
       <div className="max-w-4xl mx-auto">
         <CustomPortableText value={content} />
       </div>

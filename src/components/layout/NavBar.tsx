@@ -27,7 +27,7 @@ export default function NavBar({
 
   return (
     <nav className="bg-white shadow-md relative z-10">
-      <div className="main-container">
+      <div className="content-container">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">

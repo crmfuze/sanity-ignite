@@ -11,7 +11,7 @@ type Props = {
 
 const Post = ({ post }: Props) => {
   return (
-    <div className="main-container mx-auto max-w-5xl pt-5 md:pt-8 pb-12">
+    <div className="content-container mx-auto max-w-5xl pt-5 md:pt-8 pb-12">
       {post.image?.asset?._ref ? (
         <div className="mb-6 md:mb-14">
           <CoverImage image={post.image} priority />

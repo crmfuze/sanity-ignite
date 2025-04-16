@@ -14,7 +14,7 @@ export default function PostListSection({ section }: { section: PostListSection 
 
   return (
     <section className="py-10 md:py-14">
-      <div className="main-container mx-auto">
+      <div className="content-container mx-auto">
         <div className="max-w-2xl mx-auto text-center mb-12">
           <h2 className="text-4xl font-bold mb-4">{section?.heading}</h2>
           <p className="text-gray-600">Latest updates and insights from our team</p>
