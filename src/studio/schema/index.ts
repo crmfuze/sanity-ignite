@@ -19,12 +19,14 @@ import divider from './objects/sections/divider';
 import subscribe from './objects/sections/subscribe';
 import menuItem from './objects/menuItem';
 import seoTypes from './objects/seo';
+import footer from './singletons/footer';
 
 export const schemaTypes = [
   // Singletons
   settings,
   homePage,
   blogPage,
+  footer,
 
   // Documents
   page,

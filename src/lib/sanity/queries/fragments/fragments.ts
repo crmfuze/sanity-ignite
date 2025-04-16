@@ -135,8 +135,8 @@ export const mediaTextSectionFragment = /* groq */ `
   heading,
   text,
   media,
-  mediaPosition,
-  ${buttonsFragment}
+  imagePosition,
+  button {${buttonFragment}}
 `;
 
 export const categoryFragment = /* groq */ `

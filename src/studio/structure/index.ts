@@ -1,4 +1,4 @@
-import { CogIcon, HomeIcon, DocumentIcon } from '@sanity/icons';
+import { CogIcon, HomeIcon, DocumentIcon, TagIcon } from '@sanity/icons';
 import type { StructureResolver } from 'sanity/structure';
 
 /**
@@ -23,11 +23,17 @@ export const structure: StructureResolver = (S) =>
       ...S.documentTypeListItems().filter((listItem) => {
         const id = listItem.getId();
         return typeof id !== 'undefined'
-          ? !['settings', 'homePage', 'assist.instruction.context', 'blogPage'].includes(id)
+          ? !['settings', 'homePage', 'assist.instruction.context', 'blogPage', 'footer'].includes(
+              id,
+            )
           : false;
       }),
       S.listItem()
         .title('Site Settings')
         .child(S.document().schemaType('settings').documentId('siteSettings'))
         .icon(CogIcon),
+      S.listItem()
+        .title('Footer')
+        .child(S.document().schemaType('footer').documentId('footer'))
+        .icon(TagIcon),
     ]);

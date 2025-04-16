@@ -34,6 +34,10 @@ export default defineType({
         }),
       ],
     }),
+    defineField({
+      name: 'button',
+      type: 'button',
+    }),
   ],
   preview: {
     select: {

@@ -3,7 +3,7 @@ import { DividerSection } from './types';
 export default function Divider({ section: { height } }: { section: DividerSection }) {
   return (
     <div className="py-10   md:py-14">
-      <div className="container mx-auto px-4">
+      <div className="main-container mx-auto px-4">
         <div
           className={'w-full h-px bg-gray-200 relative'}
           style={height ? { height: `${height}px` } : undefined}

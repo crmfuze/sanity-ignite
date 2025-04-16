@@ -110,3 +110,73 @@ export const postsArchiveQuery = defineQuery(`
     }
   }
 `);
+
+export const footerQuery = defineQuery(`*[_type == "footer"][0] {
+  logo {
+    asset->{
+      url
+    },
+    alt
+  },
+  companyLinks {
+    sectionTitle,
+    links[] {
+      text,
+      url,
+      isExternal
+    }
+  },
+  ourProductsLinks {
+    sectionTitle,
+    links[] {
+      text,
+      url,
+      isExternal
+    }
+  },
+  patnerProgramsLinks {
+    sectionTitle,
+    links[] {
+      text,
+      url,
+      isExternal
+    }
+  },
+  legalLinks {
+    sectionTitle,
+    links[] {
+      text,
+      url,
+      isExternal
+    }
+  },
+  socialLinks {
+    sectionTitle,
+    links[] {
+      image {
+        asset-> {
+          url
+        },
+        alt
+      },
+      url,
+      isExternal
+    }
+  },
+  ctaButton {
+    text,
+    url,
+    variant
+  },
+  visaImage {
+    asset-> {
+      url
+    }
+  },
+  copyrightText {
+    line1,
+    line2,
+    line3
+  }
+}
+`);

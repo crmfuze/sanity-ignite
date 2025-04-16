@@ -10,7 +10,7 @@ export default function CardGrid({
 }) {
   return (
     <section className="py-12 md:py-16 my-10 md:my-14 bg-gray-50 rounded-4xl ">
-      <div className="container mx-auto px-4">
+      <div className="main-container mx-auto px-4">
         <div className="max-w-2xl mx-auto text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">{heading}</h2>
           <div className="text-xl text-gray-600">
