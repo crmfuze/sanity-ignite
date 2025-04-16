@@ -7,34 +7,37 @@ import type { HeroSection } from './types';
 
 export default function HeroSection({ section }: { section: HeroSection }) {
   return (
-    <section className="py-10 md:py-14 bg-white">
-      <div className="container mx-auto">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">{section?.heading}</h1>
-            <PortableText className="text-xl" value={section.text as PortableTextBlock[]} />
+    <section className="bg-[#FEFAFF] py-12">
+      <div className="main-container flex flex-col-reverse lg:flex-row  items-center gap-4  ">
+        {/* Left Content */}
+        <div className="max-w-[600px] w-full text-center lg:text-left ">
+          <h2 className="text-[#9B37AE] font-inter font-bold md:text-[45px] md:leading-[55px] text-[30px] leading-[40px] tracking-normal">
+            {section?.heading}
+          </h2>
+          <PortableText
+            className="mt-4 text-[#434343] text-sm md:text-[18px] md:leading-[33px] font-normal tracking-normal font-['Poppins']"
+            value={section.text as PortableTextBlock[]}
+          />
+          {section?.buttons && section?.buttons.length ? (
+            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              {section?.buttons.length > 1 && (
+                <ButtonsGroup className="w-full md:w-auto" buttons={section?.buttons} />
+              )}
+            </div>
+          ) : null}
+        </div>
 
-            {section?.buttons && section?.buttons.length ? (
-              <div className="mt-8 gap-4 flex">
-                {section?.buttons.length > 1 && (
-                  <ButtonsGroup className="w-full md:w-auto" buttons={section?.buttons} />
-                )}
-              </div>
-            ) : null}
-          </div>
-          <div className="relative">
-            {section.image?.asset && (
-              <Image
-                src={urlForImage(section.image)?.width(1000).height(667).url() as string}
-                alt={section?.image?.alt || ''}
-                width={600}
-                height={400}
-                className="rounded-4xl shadow-xl"
-              />
-            )}
-            <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-pink-500 rounded-full opacity-50"></div>
-            <div className="absolute -top-4 -right-4 w-16 h-16 bg-blue-500 rounded-full opacity-50"></div>
-          </div>
+        {/* Right Image */}
+        <div className="max-w-[722px] w-full flex justify-center ">
+          {section.image?.asset && (
+            <Image
+              src={urlForImage(section.image)?.url() as string}
+              alt="section?.image?.alt || ''"
+              width={722}
+              height={444}
+              className="w-full"
+            />
+          )}
         </div>
       </div>
     </section>
