@@ -8,17 +8,26 @@ export default defineType({
   icon: RemoveIcon,
   fields: [
     defineField({
-      name: 'height',
-      title: 'Height',
-      type: 'number',
-      initialValue: 1,
-      validation: (Rule) => Rule.min(1).max(100),
-      description: 'The height of the divider in pixels',
+      name: 'heading',
+      type: 'string',
+    }),
+    defineField({
+      name: 'description',
+      title: 'Description',
+      type: 'string',
+    }),
+    defineField({
+      name: 'button',
+      title: 'Button',
+      type: 'button',
     }),
   ],
   preview: {
-    prepare() {
-      return { title: `Divider` };
+    select: {
+      buttonText: 'button.text',
+    },
+    prepare({ buttonText }) {
+      return { title: `Divider${buttonText ? ` with button: ${buttonText}` : ''}` };
     },
   },
 });

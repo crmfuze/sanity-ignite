@@ -46,7 +46,7 @@ export default function MediaTextSection({ section }: { section: MediaTextSectio
         </div>
         <div className="">
           {section?.button && (
-            <Button asChild variant={section.button.variant} size={'lg'} key={section.button._key}>
+            <Button asChild variant={section.button.variant} size={'xl'} key={section.button._key}>
               <Link
                 href={section.button.link ? getLinkByLinkObject(section.button.link) || '' : ''}
                 target={section.button.link?.openInNewTab ? '_blank' : '_self'}

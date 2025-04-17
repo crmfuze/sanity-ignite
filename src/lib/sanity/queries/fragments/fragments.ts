@@ -191,7 +191,9 @@ export const postListSectionFragment = /* groq */ `
 
 export const dividerSectionFragment = /* groq */ `
   _type,
-  height
+  heading,
+  description,
+  button {${buttonFragment}},
 `;
 
 export const ctaSectionFragment = /* groq */ `
