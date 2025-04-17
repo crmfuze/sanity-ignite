@@ -12,6 +12,10 @@ export default defineField({
       type: 'string',
     }),
     defineField({
+      name: 'subtitle',
+      type: 'string',
+    }),
+    defineField({
       name: 'content',
       type: 'blockContent',
     }),

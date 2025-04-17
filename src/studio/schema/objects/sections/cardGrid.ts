@@ -8,7 +8,14 @@ export default defineType({
   icon: InlineIcon,
   title: 'Card Grid',
   fields: [
-    ...card.fields,
+    defineField({
+      name: 'heading',
+      type: 'string',
+    }),
+    defineField({
+      name: 'subtitle',
+      type: 'string',
+    }),
     defineField({
       name: 'cards',
       type: 'array',

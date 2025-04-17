@@ -212,6 +212,7 @@ export const subscribeSectionFragment = /* groq */ `
 export const cardGridFragment = /* groq */ `
   _type,
   heading,
+  subtitle,
   ${contentFragment}
   icon,
 `;
@@ -225,7 +226,9 @@ export const blockContentSectionFragment = /* groq */ `
 `;
 
 export const cardGridsSectionFragment = /* groq */ `
-  ${cardGridFragment}
+  _type,  
+  heading,
+  subtitle,
   cards[]{
     ${cardGridFragment}
   },
