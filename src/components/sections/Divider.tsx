@@ -8,7 +8,7 @@ export default function Divider({ section }: { section: DividerSection }) {
 
   return (
     <div className="flex items-center justify-center bg-custom mx-auto py-12 px-4 sm:px-6">
-      <div className="main-container">
+      <div className="content-container">
         <div className="flex flex-col lg:flex-row items-center justify-between">
           {/* Left Side */}
           <div className="text-center lg:text-left lg:w-1/2">
