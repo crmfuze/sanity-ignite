@@ -1,13 +1,16 @@
-import { type HttpTypes } from "@medusajs/types";
-import { Heading, Text } from "@medusajs/ui";
+import { type HttpTypes } from '@medusajs/types';
+import { Heading, Text } from '@medusajs/ui';
 
-import LocalizedClientLink from "@/components/modules/common/components/localized-client-link";
+import LocalizedClientLink from '@/components/modules/common/components/localized-client-link';
 
 type ProductInfoProps = {
   product: HttpTypes.StoreProduct;
+  sanity?: {
+    content: string;
+  };
 };
 
-const ProductInfo = ({ product }: ProductInfoProps) => {
+const ProductInfo = ({ product, sanity }: ProductInfoProps) => {
   return (
     <div id="product-info">
       <div className="flex flex-col gap-y-4 lg:max-w-[500px] mx-auto">
@@ -31,7 +34,7 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
           className="text-medium text-ui-fg-subtle whitespace-pre-line"
           data-testid="product-description"
         >
-          {product.description}
+          {sanity?.content || product.description}
         </Text>
       </div>
     </div>

@@ -1,27 +1,31 @@
-import { type HttpTypes } from "@medusajs/types";
-import { notFound } from "next/navigation";
-import React, { Suspense } from "react";
+import { type HttpTypes } from '@medusajs/types';
+import { notFound } from 'next/navigation';
+import React, { Suspense } from 'react';
 
-import ImageGallery from "@/components/modules/products/components/image-gallery";
-import ProductActions from "@/components/modules/products/components/product-actions";
-import ProductOnboardingCta from "@/components/modules/products/components/product-onboarding-cta";
-import ProductTabs from "@/components/modules/products/components/product-tabs";
-import RelatedProducts from "@/components/modules/products/components/related-products";
-import ProductInfo from "@/components/modules/products/templates/product-info";
-import SkeletonRelatedProducts from "@/components/modules/skeletons/templates/skeleton-related-products";
+import ImageGallery from '@/components/modules/products/components/image-gallery';
+import ProductActions from '@/components/modules/products/components/product-actions';
+import ProductOnboardingCta from '@/components/modules/products/components/product-onboarding-cta';
+import ProductTabs from '@/components/modules/products/components/product-tabs';
+import RelatedProducts from '@/components/modules/products/components/related-products';
+import ProductInfo from '@/components/modules/products/templates/product-info';
+import SkeletonRelatedProducts from '@/components/modules/skeletons/templates/skeleton-related-products';
 
-import ProductActionsWrapper from "./product-actions-wrapper";
+import ProductActionsWrapper from './product-actions-wrapper';
 
 type ProductTemplateProps = {
   product: HttpTypes.StoreProduct;
   region: HttpTypes.StoreRegion;
   countryCode: string;
+  sanity?: {
+    content: string;
+  };
 };
 
 const ProductTemplate: React.FC<ProductTemplateProps> = ({
   product,
   region,
   countryCode,
+  sanity,
 }) => {
   if (!product || !product.id) {
     return notFound();
@@ -34,7 +38,7 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
         data-testid="product-container"
       >
         <div className="flex flex-col small:sticky small:top-48 small:py-0 small:max-w-[300px] w-full py-8 gap-y-6">
-          <ProductInfo product={product} />
+          <ProductInfo product={product} sanity={sanity} />
           <ProductTabs product={product} />
         </div>
         <div className="block w-full relative">
@@ -42,23 +46,12 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
         </div>
         <div className="flex flex-col small:sticky small:top-48 small:py-0 small:max-w-[300px] w-full py-8 gap-y-12">
           <ProductOnboardingCta />
-          <Suspense
-            fallback={
-              <ProductActions
-                disabled={true}
-                product={product}
-                region={region}
-              />
-            }
-          >
+          <Suspense fallback={<ProductActions disabled={true} product={product} region={region} />}>
             <ProductActionsWrapper id={product.id} region={region} />
           </Suspense>
         </div>
       </div>
-      <div
-        className="content-container my-16 small:my-32"
-        data-testid="related-products-container"
-      >
+      <div className="content-container my-16 small:my-32" data-testid="related-products-container">
         <Suspense fallback={<SkeletonRelatedProducts />}>
           <RelatedProducts product={product} countryCode={countryCode} />
         </Suspense>

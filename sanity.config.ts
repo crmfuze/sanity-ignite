@@ -132,5 +132,6 @@ export default defineConfig({
   ],
   schema: {
     types: schemaTypes,
+    templates: (templates) => templates.filter((template) => template.schemaType !== 'product'),
   },
 });
