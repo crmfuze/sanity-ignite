@@ -54,12 +54,12 @@ export default function FeaturedProducts({
 
   if (loading) {
     return (
-      <section className="py-12 bg-[#FEFAFF]">
+      <section className="py-12 bg-[#FDF5FF]">
         <div className="content-container">
-          <div className="flex flex-col items-center mb-8">
-            <h2 className="text-[#9B37AE] font-inter font-bold text-3xl md:text-4xl mb-6">
+          <div className="flex flex-col items-start mb-8">
+            <h1 className="font-inter font-bold lg:text-[45px] lg:leading-[55px] md:text-[35px] md:leading-[40px] text-[30px] leading-[35px] tracking-[0px] mb-8">
               {title}
-            </h2>
+            </h1>
           </div>
           <div className="flex justify-center">
             <p>Loading products...</p>
@@ -70,10 +70,12 @@ export default function FeaturedProducts({
   }
 
   return (
-    <section className="py-12 bg-[#FEFAFF]">
+    <section className="py-12 bg-[#FDF5FF]">
       <div className="content-container">
-        <div className="flex flex-col items-center mb-8">
-          <h2 className="text-[#9B37AE] font-inter font-bold text-3xl md:text-4xl mb-6">{title}</h2>
+        <div className="flex flex-col items-start mb-8">
+          <h1 className="font-inter font-bold lg:text-[45px] lg:leading-[55px] md:text-[35px] md:leading-[40px] text-[30px] leading-[35px] tracking-[0px] mb-8">
+            {title}
+          </h1>
         </div>
         {/* Carousel */}
         <div className="w-full">
