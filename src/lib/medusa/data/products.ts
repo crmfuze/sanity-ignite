@@ -1,6 +1,6 @@
 'use server';
 
-import type { HttpTypes } from '@medusajs/types';
+import type { HttpTypes, StoreRegion } from '@medusajs/types';
 
 import { sdk } from '../config';
 import { sortProducts } from '@/lib/medusa/util/sort-products';
@@ -131,4 +131,42 @@ export const listProductsWithSort = async ({
     nextPage,
     queryParams,
   };
+};
+
+export const listProductsById = async ({
+  productIds,
+  region,
+}: {
+  productIds: string[];
+  region: StoreRegion;
+}): Promise<{
+  products: HttpTypes.StoreProduct[];
+}> => {
+  if (!productIds.length) {
+    return { products: [] };
+  }
+
+  const headers = {
+    ...(await getAuthHeaders()),
+  };
+
+  const next = {
+    ...(await getCacheOptions('products')),
+  };
+
+  return sdk.client
+    .fetch<{ products: HttpTypes.StoreProduct[] }>(`/store/products`, {
+      method: 'GET',
+      query: {
+        id: productIds,
+        region_id: region.id,
+        fields: '*variants.calculated_price,+variants.inventory_quantity,+metadata,+tags',
+      },
+      headers,
+      next,
+      cache: 'no-cache',
+    })
+    .then(({ products }) => {
+      return { products };
+    });
 };

@@ -147,6 +147,25 @@ export const categoryFragment = /* groq */ `
   description,
 `;
 
+export const productFragment = /* groq */ `
+  _id,
+  _type,
+  title,
+  specs[]{
+    lang,
+    title,
+    content
+  },
+  addons{
+    title,
+    products[]->{
+      _id,
+      _type,
+      title,
+    }
+  }
+`;
+
 export const personFragment = /* groq */ `
   _id,
   _type,
@@ -234,6 +253,14 @@ export const cardGridsSectionFragment = /* groq */ `
   },
 `;
 
+export const featuredProductsSectionFragment = /* groq */ `
+  _type,
+  title,
+  products[]->{
+    ${productFragment}
+  }
+`;
+
 export const pageBuilderFragment = /* groq */ `
   pageSections[]{
     ...,
@@ -246,7 +273,8 @@ export const pageBuilderFragment = /* groq */ `
     _type == 'hero' => {${heroSectionFragment}},
     _type == 'mediaText' => {${mediaTextSectionFragment}},
     _type == 'postList' => {${postListSectionFragment}},
-    _type == 'subscribe' => {${subscribeSectionFragment}}
+    _type == 'subscribe' => {${subscribeSectionFragment}},
+    _type == 'featuredProducts' => {${featuredProductsSectionFragment}}
   },
 `;
 

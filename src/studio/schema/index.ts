@@ -20,7 +20,8 @@ import subscribe from './objects/sections/subscribe';
 import menuItem from './objects/menuItem';
 import seoTypes from './objects/seo';
 import footer from './singletons/footer';
-import productSchema from './documents/product';
+import product from './documents/product';
+import featuredProducts from './objects/sections/featuredProducts';
 
 export const schemaTypes = [
   // Singletons
@@ -45,6 +46,7 @@ export const schemaTypes = [
   divider,
   subscribe,
   blockContentSection,
+  featuredProducts,
 
   // Objects
   blockContent,
@@ -54,5 +56,5 @@ export const schemaTypes = [
   ...seoTypes,
 
   // Medusa
-  productSchema,
+  product,
 ];

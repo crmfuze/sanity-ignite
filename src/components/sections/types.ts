@@ -12,3 +12,4 @@ export type PostListSection = Extract<Section, { _type: 'postList' }>;
 export type CardGridSection = Extract<Section, { _type: 'cardGrid' }>;
 export type DividerSection = Extract<Section, { _type: 'divider' }>;
 export type BlockContentSection = Extract<Section, { _type: 'blockContentSection' }>;
+export type FeaturedProductsSection = Extract<Section, { _type: 'featuredProducts' }>;

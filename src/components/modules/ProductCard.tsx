@@ -1,25 +1,17 @@
-import { type HttpTypes } from "@medusajs/types";
-import { Text } from "@medusajs/ui";
+import { type HttpTypes } from '@medusajs/types';
+import { Text } from '@medusajs/ui';
 
-import { getProductPrice } from "@/lib/medusa/util/get-product-price";
-import LocalizedClientLink from "@/components/modules/common/components/localized-client-link";
+import LocalizedClientLink from '@/components/modules/common/components/localized-client-link';
 
-import Thumbnail from "../thumbnail";
-import PreviewPrice from "./price";
+import Thumbnail from './products/components/thumbnail';
 
-export default async function ProductPreview({
+export default function ProductCard({
   product,
   isFeatured,
 }: {
   product: HttpTypes.StoreProduct;
   isFeatured?: boolean;
-  region: HttpTypes.StoreRegion;
 }) {
-
-  const { cheapestPrice } = getProductPrice({
-    product,
-  });
-
   return (
     <LocalizedClientLink href={`/products/${product.handle}`} className="group">
       <div data-testid="product-wrapper">
@@ -33,9 +25,6 @@ export default async function ProductPreview({
           <Text className="text-ui-fg-subtle" data-testid="product-title">
             {product.title}
           </Text>
-          <div className="flex items-center gap-x-2">
-            {cheapestPrice && <PreviewPrice price={cheapestPrice} />}
-          </div>
         </div>
       </div>
     </LocalizedClientLink>

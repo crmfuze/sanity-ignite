@@ -13,6 +13,8 @@ import CardGrid from './CardGrid';
 import Divider from './Divider';
 import Subscribe from './Subscribe';
 import BlockContent from './BlockContent';
+import FeaturedProducts from './FeaturedProducts';
+import { StoreRegion } from '@medusajs/types';
 
 type PageSectionstype = Section['_type'];
 
@@ -25,12 +27,14 @@ const SECTION_COMPONENTS: Record<PageSectionstype, ElementType> = {
   cardGrid: CardGrid,
   divider: Divider,
   blockContentSection: BlockContent,
+  featuredProducts: FeaturedProducts,
 } as const;
 
 type PageSectionsProps = {
   documentId: string;
   documentType: string;
   sections?: Sections;
+  region?: StoreRegion;
 };
 
 type PageData = SanityDocument<{
@@ -40,6 +44,7 @@ type PageData = SanityDocument<{
 export default function PageSections({
   documentId,
   documentType,
+  region,
   sections: initialSections = [],
 }: PageSectionsProps) {
   const sections = useOptimistic<Sections, PageData>(
@@ -93,7 +98,7 @@ export default function PageSections({
               path: `pageSections[_key=="${_key}"]`,
             })}
           >
-            <SectionComponent section={sectionProps} />
+            <SectionComponent section={sectionProps} region={region} />
           </div>
         );
       })}

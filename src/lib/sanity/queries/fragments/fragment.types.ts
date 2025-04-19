@@ -31,5 +31,10 @@ export type BlockContentSectionFragmentType = Extract<
   { _type: 'blockContentSection' }
 >;
 
+export type FeaturedProductsSectionFragmentType = Extract<
+  NonNullable<SectionsType>,
+  { _type: 'featuredProducts' }
+>;
+
 export type ButtonFragmentType = NonNullable<HeroSectionFragmentType['buttons']>[number];
 export type LinkFragmentType = NonNullable<ButtonFragmentType['link']>;

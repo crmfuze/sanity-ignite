@@ -1,62 +1,57 @@
-import { ComposeIcon } from "@sanity/icons"
-import { DocumentDefinition } from "sanity"
+import { ComposeIcon } from '@sanity/icons';
+import { defineType } from 'sanity';
+import { defaultFieldGroups } from '../config/fieldGroups';
 
-const productSchema: DocumentDefinition = {
+export default defineType({
+  name: 'product',
+  title: 'Product Page',
+  icon: ComposeIcon,
+  type: 'document',
+  groups: defaultFieldGroups,
   fields: [
     {
-      name: "title",
-      type: "string",
+      name: 'title',
+      type: 'string',
     },
     {
-      group: "content",
-      name: "specs",
+      group: 'content',
+      name: 'specs',
       of: [
         {
           fields: [
-            { name: "lang", title: "Language", type: "string" },
-            { name: "title", title: "Title", type: "string" },
+            { name: 'lang', title: 'Language', type: 'string' },
+            { name: 'title', title: 'Title', type: 'string' },
             {
-              name: "content",
+              name: 'content',
               rows: 3,
-              title: "Content",
-              type: "text",
+              title: 'Content',
+              type: 'text',
             },
           ],
-          name: "spec",
-          type: "object",
+          name: 'spec',
+          type: 'object',
         },
       ],
-      type: "array",
+      type: 'array',
     },
     {
       fields: [
-        { name: "title", title: "Title", type: "string" },
+        { name: 'title', title: 'Title', type: 'string' },
         {
-          name: "products",
-          of: [{ to: [{ type: "product" }], type: "reference" }],
-          title: "Addons",
-          type: "array",
+          name: 'products',
+          of: [{ to: [{ type: 'product' }], type: 'reference' }],
+          title: 'Addons',
+          type: 'array',
           validation: (Rule) => Rule.max(3),
         },
       ],
-      name: "addons",
-      type: "object",
+      name: 'addons',
+      type: 'object',
     },
   ],
-  name: "product",
   preview: {
     select: {
-      title: "title",
+      title: 'title',
     },
   },
-  title: "Product Page",
-  type: "document",
-  groups: [{
-    default: true,
-    icon: ComposeIcon,
-    name: "content",
-    title: "Content",
-  }],
-}
-
-export default productSchema
+});
