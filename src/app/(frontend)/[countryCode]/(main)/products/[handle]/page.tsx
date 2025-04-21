@@ -3,7 +3,10 @@ import { notFound } from 'next/navigation';
 import { listProducts } from '@/lib/medusa/data/products';
 import { getRegion, listRegions } from '@/lib/medusa/data/regions';
 import ProductTemplate from '@/components/modules/products/templates';
-import { client } from '@/lib/sanity/client/client';
+import { sanityFetch } from '@/lib/sanity/client/live';
+import { productPageQuery } from '@/lib/sanity/queries/queries';
+import ProductIngredients from '@/components/modules/products/templates/product-ingredients';
+import PageSections from '@/components/sections/PageSections';
 
 type Props = {
   params: Promise<{ countryCode: string; handle: string }>;
@@ -54,6 +57,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
   const product = await listProducts({
     countryCode: params.countryCode,
+    // @ts-expect-error Medusa Types Not Updated
     queryParams: { handle },
   }).then(({ response }) => response.products[0]);
 
@@ -75,6 +79,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 export default async function ProductPage(props: Props) {
   const params = await props.params;
   const region = await getRegion(params.countryCode);
+  const handle = params.handle;
 
   if (!region) {
     notFound();
@@ -82,17 +87,30 @@ export default async function ProductPage(props: Props) {
 
   const pricedProduct = await listProducts({
     countryCode: params.countryCode,
-    queryParams: { handle: params.handle },
+    // @ts-expect-error Medusa Types Not Updated
+    queryParams: { handle: handle },
   }).then(({ response }) => response.products[0]);
 
   if (!pricedProduct) {
     notFound();
   }
 
-  // alternatively, you can filter the content by the language
-  const sanity = (await client.getDocument(pricedProduct.id))?.specs[0]
+  const { data: content } = await sanityFetch({
+    query: productPageQuery,
+    params: { handle },
+  });
+
+  if (!content) {
+    notFound();
+  }
+
+  const { _id, _type, ingredients, pageSections } = content;
 
   return (
-    <ProductTemplate product={pricedProduct} region={region} countryCode={params.countryCode} />
+    <div>
+      <ProductTemplate product={pricedProduct} region={region} countryCode={params.countryCode} />
+      {ingredients && <ProductIngredients product={pricedProduct} ingredients={ingredients} />}
+      <PageSections documentId={_id} documentType={_type} sections={pageSections} region={region} />
+    </div>
   );
 }

@@ -20,6 +20,14 @@ module.exports = {
         padding: 'padding-top padding-right padding-bottom padding-left',
       },
       colors: {
+        ingredients: {
+          textColor: '#434343',
+          headingText: '#9B37AE',
+          buttonBg: '#9B37AE',
+          buttonText: '#FFFFFF',
+          SkyText: '#4ACAC6',
+          Text: '#1E1E1E',
+        },
         grey: {
           0: '#FFFFFF',
           5: '#F9FAFB',

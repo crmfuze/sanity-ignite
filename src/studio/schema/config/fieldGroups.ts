@@ -10,4 +10,8 @@ export const defaultFieldGroups: FieldGroupDefinition[] = [
     name: 'seo',
     title: 'SEO',
   },
+  {
+    name: 'settings',
+    title: 'Settings',
+  },
 ];

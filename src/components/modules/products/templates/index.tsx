@@ -6,9 +6,9 @@ import ImageGallery from '@/components/modules/products/components/image-gallery
 import ProductActions from '@/components/modules/products/components/product-actions';
 import ProductOnboardingCta from '@/components/modules/products/components/product-onboarding-cta';
 import ProductTabs from '@/components/modules/products/components/product-tabs';
-import RelatedProducts from '@/components/modules/products/components/related-products';
+// import RelatedProducts from '@/components/modules/products/components/related-products';
 import ProductInfo from '@/components/modules/products/templates/product-info';
-import SkeletonRelatedProducts from '@/components/modules/skeletons/templates/skeleton-related-products';
+// import SkeletonRelatedProducts from '@/components/modules/skeletons/templates/skeleton-related-products';
 
 import ProductActionsWrapper from './product-actions-wrapper';
 
@@ -51,11 +51,11 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
           </Suspense>
         </div>
       </div>
-      <div className="content-container my-16 small:my-32" data-testid="related-products-container">
+      {/* <div className="content-container my-16 small:my-32" data-testid="related-products-container">
         <Suspense fallback={<SkeletonRelatedProducts />}>
           <RelatedProducts product={product} countryCode={countryCode} />
         </Suspense>
-      </div>
+      </div> */}
     </>
   );
 };

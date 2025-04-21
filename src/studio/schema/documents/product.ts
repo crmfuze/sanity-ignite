@@ -1,6 +1,8 @@
 import { ComposeIcon } from '@sanity/icons';
-import { defineType } from 'sanity';
+import { defineField, defineType } from 'sanity';
 import { defaultFieldGroups } from '../config/fieldGroups';
+import { definePathname } from '@tinloof/sanity-studio';
+import pageSections from '../fields/pageSections';
 
 export default defineType({
   name: 'product',
@@ -13,6 +15,10 @@ export default defineType({
       name: 'title',
       type: 'string',
     },
+    defineField({
+      ...definePathname(),
+      group: "settings",
+    }),
     {
       group: 'content',
       name: 'specs',
@@ -35,6 +41,39 @@ export default defineType({
       type: 'array',
     },
     {
+      name: 'ingredients',
+      group: 'content',
+      title: 'Product Ingredients',
+      type: 'array',
+      of: [
+        {
+          name: 'ingredient',
+          title: 'Ingredient',
+          type: 'object',
+          fields: [
+            { name: 'name', title: 'Name', type: 'string' },
+            { name: 'heading', title: 'Heading', type: 'string' },
+            { name: 'description', title: 'Description', type: 'text' },
+            { name: 'image', title: 'Image', type: 'image' },
+            {
+              name: 'benefits',
+              title: 'Ingredient Benefits',
+              type: 'array',
+              of: [
+                {
+                  name: 'benefit',
+                  type: 'object',
+                  fields: [
+                    { name: 'description', type: 'text' },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
       fields: [
         { name: 'title', title: 'Title', type: 'string' },
         {
@@ -48,6 +87,7 @@ export default defineType({
       name: 'addons',
       type: 'object',
     },
+    pageSections
   ],
   preview: {
     select: {

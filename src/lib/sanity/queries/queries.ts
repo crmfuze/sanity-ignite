@@ -6,6 +6,7 @@ import {
   categoryFragment,
   personFragment,
   postCardFragment,
+  pageBuilderFragment,
 } from './fragments/fragments';
 
 export const settingsQuery = defineQuery(`*[_type == "settings" && _id == "siteSettings"][0]{
@@ -38,6 +39,12 @@ export const getPageQuery = defineQuery(`
     ${pageFragment}
   }
 `);
+
+export const productPageQuery = defineQuery(`
+    *[_type == 'product' && pathname.current == ("/products/" + $handle)][0] {
+    ...,
+    ${pageBuilderFragment}
+}`);
 
 export const getSitemapQuery = defineQuery(`
   *[((_type in ["page", "post"] && defined(slug.current)) || (_type == "homePage")) && seo.noIndex != true]{

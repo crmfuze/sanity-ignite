@@ -151,6 +151,17 @@ export const productFragment = /* groq */ `
   _id,
   _type,
   title,
+  ingredients[]{
+    ingredient {
+      name,
+      heading,
+      description,
+      image,
+      benefits[] {
+        description
+      }
+    }
+  },
   specs[]{
     lang,
     title,
