@@ -190,7 +190,7 @@ When running unit or integration tests, the `.env.test` file is loaded automatic
 This project uses ESLint and Prettier for code linting and formatting. Run the following commands to lint and format your code:
 
 ```bash
-npm run lint # Lint the code
+yarn run lint # Lint the code
 ```
 
 ### Custom ESLint Configurations
