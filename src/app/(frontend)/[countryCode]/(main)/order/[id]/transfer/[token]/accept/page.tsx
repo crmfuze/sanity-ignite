@@ -2,8 +2,12 @@ import { acceptTransferRequest } from '@/lib/medusa/data/orders';
 import { Heading, Text } from '@medusajs/ui';
 import TransferImage from '@/components/modules/order/components/transfer-image';
 
-export default async function TransferPage({ params }: { params: { id: string; token: string } }) {
-  const { id, token } = params;
+export default async function TransferPage({
+  params,
+}: {
+  params: Promise<{ id: string; token: string }>;
+}) {
+  const { id, token } = await params;
 
   const { success, error } = await acceptTransferRequest(id, token);
 

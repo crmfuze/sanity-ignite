@@ -15,8 +15,6 @@ type Props = {
   }>;
 };
 
-export const PRODUCT_LIMIT = 12;
-
 export async function generateStaticParams() {
   const { collections } = await listCollections({
     fields: '*products',
@@ -70,6 +68,7 @@ export default async function CollectionPage(props: Props) {
   const { sortBy, page } = searchParams;
 
   const collection = await getCollectionByHandle(params.handle).then(
+    // @ts-expect-error Medusa
     (collection: StoreCollection) => collection,
   );
 

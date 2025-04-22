@@ -72,10 +72,12 @@ const Shipping: React.FC<ShippingProps> = ({
   const isOpen = searchParams.get("step") === "delivery";
 
   const _shippingMethods = availableShippingMethods?.filter(
+    // @ts-expect-error Medusa Types
     (sm) => sm.service_zone?.fulfillment_set?.type !== "pickup",
   );
 
   const _pickupMethods = availableShippingMethods?.filter(
+    // @ts-expect-error Medusa Types
     (sm) => sm.service_zone?.fulfillment_set?.type === "pickup",
   );
 
@@ -335,6 +337,7 @@ const Shipping: React.FC<ShippingProps> = ({
                               </span>
                               <span className="text-base-regular text-ui-fg-muted">
                                 {formatAddress(
+                                  // @ts-expect-error Medusa Types
                                   option.service_zone?.fulfillment_set?.location
                                     ?.address,
                                 )}
