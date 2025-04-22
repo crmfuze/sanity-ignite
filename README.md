@@ -1,6 +1,6 @@
-# Sanity Ignite by 10up
+# Sanity Medusa Ignite By Ambrosia Global
 
-A Sanity starter kit providing modern, clean designs for your content-driven websites. Built with Next.js and Tailwind CSS.
+A Sanity Medusa Project providing modern, clean designs for your content-driven websites. Built with Next.js and Tailwind CSS.
 
 Out of the box it includes schema for pages, posts, categories, authors, and global settings. Pages are structured with a page builder that lets you compose a number of components: hero, CTA, post list, subscribe, content, etc.
 
@@ -16,15 +16,7 @@ Out of the box it includes schema for pages, posts, categories, authors, and glo
 
 ## Getting Started
 
-### 1. Initialize template with Sanity CLI
-
-```bash
-npm create sanity@latest -- --template 10up/sanity-ignite
-```
-
-This will install your NPM dependencies and populate the `.env.local` file.
-
-### 2. Start the Development Server
+### 1. Start the Development Server
 
 ```bash
 yarn run dev
@@ -47,7 +39,7 @@ Open the next app locally at [http://localhost:3000](http://localhost:3000) and 
 │ ├── 📂 components         # UI components and icons
 │ │ ├── 📂 icons            # Custom SVG/icon components
 │ │ ├── 📂 ui               # Presentational UI components with no side effects
-│ │ ├── 📂 modules          # Components that receive Sanity data and may call server actions
+│ │ ├── 📂 modules          # Components that receive Sanity/Medusa data and may call server actions
 │ │ ├── 📂 sections         # Page builder sections
 │ │ ├── 📂 templates        # Page templates
 │ ├── 📂 hooks              # Custom react hooks
@@ -76,7 +68,7 @@ Open the next app locally at [http://localhost:3000](http://localhost:3000) and 
 
 - **`modules/` - Components that Accept Sanity Data**
 
-  - These components receive **data from Sanity queries** and might contain logic to manipulate or render that data.
+  - These components receive **data from Sanity/Medusa queries** and might contain logic to manipulate or render that data.
   - No direct data fetching should happen inside these components.
   - They can, however, call **server actions** that fetch or modify data.
 
