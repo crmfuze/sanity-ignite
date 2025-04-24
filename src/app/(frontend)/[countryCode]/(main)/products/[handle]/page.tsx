@@ -1,12 +1,14 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { listProducts } from '@/lib/medusa/data/products';
+import { getProductByHandle } from '@/lib/medusa/data/products';
 import { getRegion, listRegions } from '@/lib/medusa/data/regions';
 import ProductTemplate from '@/components/modules/products/templates';
 import { sanityFetch } from '@/lib/sanity/client/live';
 import { productPageQuery } from '@/lib/sanity/queries/queries';
 import ProductIngredients from '@/components/modules/products/templates/product-ingredients';
 import PageSections from '@/components/sections/PageSections';
+import { sdk } from '@/lib/medusa/config';
+import { getAuthHeaders } from '@/lib/medusa/data/cookies';
 
 type Props = {
   params: Promise<{ countryCode: string; handle: string }>;
@@ -22,10 +24,10 @@ export async function generateStaticParams() {
       return [];
     }
 
-    const products = await listProducts({
-      countryCode: 'US',
-      queryParams: { fields: 'handle' },
-    }).then(({ response }) => response.products);
+    const { products } = await sdk.store.product.list(
+      { fields: 'handle' },
+      { next: { tags: ['products'] }, ...(await getAuthHeaders()) },
+    );
 
     return countryCodes
       .map((countryCode) =>
@@ -55,11 +57,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     notFound();
   }
 
-  const product = await listProducts({
-    countryCode: params.countryCode,
-    // @ts-expect-error Medusa Types Not Updated
-    queryParams: { handle },
-  }).then(({ response }) => response.products[0]);
+  const product = await getProductByHandle(handle, region.id);
 
   if (!product) {
     notFound();
@@ -85,11 +83,7 @@ export default async function ProductPage(props: Props) {
     notFound();
   }
 
-  const pricedProduct = await listProducts({
-    countryCode: params.countryCode,
-    // @ts-expect-error Medusa Types Not Updated
-    queryParams: { handle: handle },
-  }).then(({ response }) => response.products[0]);
+  const pricedProduct = await getProductByHandle(params.handle, region.id);
 
   if (!pricedProduct) {
     notFound();

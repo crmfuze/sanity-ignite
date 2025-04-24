@@ -170,3 +170,28 @@ export const listProductsById = async ({
       return { products };
     });
 };
+
+export const getProductByHandle = async (handle: string, regionId: string) => {
+  const headers = {
+    ...(await getAuthHeaders()),
+  };
+
+  const next = {
+    ...(await getCacheOptions('products')),
+  };
+
+  return sdk.client
+    .fetch<{ products: HttpTypes.StoreProduct[] }>(`/store/products`, {
+      credentials: 'include',
+      method: 'GET',
+      query: {
+        handle,
+        region_id: regionId,
+        fields: '*variants.calculated_price,+variants.inventory_quantity,+metadata,+tags',
+      },
+      headers,
+      next,
+      cache: 'force-cache',
+    })
+    .then(({ products }) => products[0]);
+};

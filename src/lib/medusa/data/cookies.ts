@@ -1,17 +1,22 @@
+'use server';
+
 import 'server-only';
 
 import { cookies as nextCookies } from 'next/headers';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export const getAuthHeaders = async (): Promise<{ authorization: string } | {}> => {
-  const cookies = await nextCookies();
-  const token = cookies.get('_medusa_jwt')?.value;
+  try {
+    const cookies = await nextCookies();
+    const token = cookies.get('_medusa_jwt')?.value;
 
-  if (!token) {
+    if (token) {
+      return { authorization: `Bearer ${token}` };
+    }
+
+    return {};
+  } catch (error) {
     return {};
   }
-
-  return { authorization: `Bearer ${token}` };
 };
 
 export const getCacheTag = async (tag: string): Promise<string> => {
@@ -24,13 +29,11 @@ export const getCacheTag = async (tag: string): Promise<string> => {
     }
 
     return `${tag}-${cacheId}`;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return '';
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export const getCacheOptions = async (tag: string): Promise<{ tags: string[] } | {}> => {
   if (typeof window !== 'undefined') {
     return {};

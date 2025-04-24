@@ -1,8 +1,8 @@
-import { listProductsWithSort } from "@/lib/medusa/data/products";
-import { getRegion } from "@/lib/medusa/data/regions";
-import ProductPreview from "@/components/modules/products/components/product-preview";
-import { Pagination } from "@/components/modules/store/components/pagination";
-import { type SortOptions } from "@/components/modules/store/components/refinement-list/sort-products";
+import { listProductsWithSort } from '@/lib/medusa/data/products';
+import { getRegion } from '@/lib/medusa/data/regions';
+import ProductPreview from '@/components/modules/products/components/product-preview';
+import { Pagination } from '@/components/modules/store/components/pagination';
+import { type SortOptions } from '@/components/modules/store/components/refinement-list/sort-products';
 
 const PRODUCT_LIMIT = 12;
 
@@ -34,19 +34,19 @@ export default async function PaginatedProducts({
   };
 
   if (collectionId) {
-    queryParams["collection_id"] = [collectionId];
+    queryParams['collection_id'] = [collectionId];
   }
 
   if (categoryId) {
-    queryParams["category_id"] = [categoryId];
+    queryParams['category_id'] = [categoryId];
   }
 
   if (productsIds) {
-    queryParams["id"] = productsIds;
+    queryParams['id'] = productsIds;
   }
 
-  if (sortBy === "created_at") {
-    queryParams["order"] = "created_at";
+  if (sortBy === 'created_at') {
+    queryParams['order'] = 'created_at';
   }
 
   const region = await getRegion(countryCode);
@@ -55,7 +55,7 @@ export default async function PaginatedProducts({
     return null;
   }
 
-  let {
+  const {
     response: { products, count },
   } = await listProductsWithSort({
     page,
@@ -81,11 +81,7 @@ export default async function PaginatedProducts({
         })}
       </ul>
       {totalPages > 1 && (
-        <Pagination
-          data-testid="product-pagination"
-          page={page}
-          totalPages={totalPages}
-        />
+        <Pagination data-testid="product-pagination" page={page} totalPages={totalPages} />
       )}
     </>
   );
