@@ -71,7 +71,7 @@ export async function signup(_currentState: unknown, formData: FormData) {
   };
 
   try {
-    const token = await sdk.auth.register('customer', 'emailpass', {
+    const token = await sdk.auth.register('customer', 'mlmsoft-auth', {
       email: customerForm.email,
       password: password,
     });
@@ -88,7 +88,7 @@ export async function signup(_currentState: unknown, formData: FormData) {
       headers,
     );
 
-    const loginToken = await sdk.auth.login('customer', 'emailpass', {
+    const loginToken = await sdk.auth.login('customer', 'mlmsoft-auth', {
       email: customerForm.email,
       password,
     });
@@ -111,7 +111,7 @@ export async function login(_currentState: unknown, formData: FormData) {
   const password = formData.get('password') as string;
 
   try {
-    await sdk.auth.login('customer', 'emailpass', { email, password }).then(async (token) => {
+    await sdk.auth.login('customer', 'mlmsoft-auth', { email, password }).then(async (token) => {
       await setAuthToken(token as string);
       const customerCacheTag = await getCacheTag('customers');
       revalidateTag(customerCacheTag);
