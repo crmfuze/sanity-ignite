@@ -4,8 +4,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Build/Development Commands
 - `yarn dev` - Run development environment (Next.js + Sanity typegen watcher)
-- `yarn lint` - Run ESLint
-- `yarn typecheck` - Run TypeScript type checking
 - `yarn test` - Run Vitest tests
 - `yarn test <file.test.ts>` - Run specific test file
 

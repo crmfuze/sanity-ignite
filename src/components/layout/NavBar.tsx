@@ -1,79 +1,133 @@
 'use client';
 
-import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
-import { FaShoppingCart, FaUser } from 'react-icons/fa';
-import { FiMenu, FiX } from 'react-icons/fi';
+import { useState, Suspense } from 'react';
+import { ShoppingBag, User, Menu, X } from 'lucide-react';
 import { SettingsQueryResult } from '@/sanity.types';
 import { getLinkByLinkObject } from '@/lib/links';
 import { urlForImage } from '@/lib/sanity/client/utils';
+import LocalizedClientLink from '../modules/common/components/localized-client-link';
+import { HttpTypes } from '@medusajs/types';
+import CartDropdown from '../modules/layout/components/cart-dropdown';
+
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from '@/components/ui/navigation-menu';
+import { cn } from '@/lib/utils';
 
 export default function NavBar({
   logo,
   menuItems,
+  cart,
 }: {
   logo: NonNullable<NonNullable<SettingsQueryResult>['logo']>;
   menuItems: NonNullable<NonNullable<SettingsQueryResult>['menu']>;
+  cart?: HttpTypes.StoreCart | null;
 }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  // Icons
-  const icons = [
-    // { icon: FaEnvelope, label: 'Contact' },
-    { icon: FaShoppingCart, label: 'Cart' },
-    { icon: FaUser, label: 'User' },
-  ];
 
   return (
     <nav className="bg-white shadow-md relative z-10">
       <div className="content-container">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <div className="flex-shrink-0">
-            <Link href="/">
+          <div className="flex-shrink-0 flex items-center">
+            <LocalizedClientLink href="/">
               {logo?.asset && (
                 <Image
-                  src={urlForImage(logo)?.width(150).height(50).url() as string}
+                  src={urlForImage(logo)?.width(150).url() as string}
                   alt={logo?.alt || ''}
                   width={150}
                   height={50}
+                  className="object-contain"
                 />
               )}
-            </Link>
+            </LocalizedClientLink>
           </div>
 
-          {/* Nav Links (Desktop) */}
+          {/* Desktop Navigation */}
           <div className="hidden lg:flex space-x-6 items-center">
-            {menuItems.map((item) => (
-              <Link
-                key={item._key}
-                href={item.link ? getLinkByLinkObject(item.link) || '#' : '#'}
-                className="font-poppins font-semibold text-[14px] leading-[21px] tracking-[0px] text-[#434343] hover:text-[#9B37AE] hover:underline"
-                {...(item.link?.openInNewTab
-                  ? { target: '_blank', rel: 'noopener noreferrer' }
-                  : {})}
-              >
-                {item.text}
-              </Link>
-            ))}
+            <NavigationMenu>
+              <NavigationMenuList>
+                {menuItems.map((item) => (
+                  <NavigationMenuItem key={item._key} className="hover:text-[#9B37AE]">
+                    {item.childMenu ? (
+                      // Dropdown menu for items with children
+                      <>
+                        <NavigationMenuTrigger className={cn(navigationMenuTriggerStyle())}>
+                          {item.text}
+                        </NavigationMenuTrigger>
+                        <NavigationMenuContent>
+                          <div className="p-1 w-[200px]">
+                            {item.childMenu.map((child) => (
+                              <NavigationMenuLink key={child._key} asChild>
+                                <LocalizedClientLink
+                                  href={child.link ? getLinkByLinkObject(child.link) || '#' : '#'}
+                                  className="block p-2 hover:bg-gray-100 hover:text-[#9B37AE] rounded-md"
+                                  {...(child.link?.openInNewTab
+                                    ? { target: '_blank', rel: 'noopener noreferrer' }
+                                    : {})}
+                                >
+                                  {child.text}
+                                </LocalizedClientLink>
+                              </NavigationMenuLink>
+                            ))}
+                          </div>
+                        </NavigationMenuContent>
+                      </>
+                    ) : (
+                      // Simple link for items without children
+                      <NavigationMenuLink asChild>
+                        <LocalizedClientLink
+                          href={item.link ? getLinkByLinkObject(item.link) || '#' : '#'}
+                          className={cn(navigationMenuTriggerStyle(), 'cursor-pointer')}
+                          {...(item.link?.openInNewTab
+                            ? { target: '_blank', rel: 'noopener noreferrer' }
+                            : {})}
+                        >
+                          {item.text}
+                        </LocalizedClientLink>
+                      </NavigationMenuLink>
+                    )}
+                  </NavigationMenuItem>
+                ))}
+              </NavigationMenuList>
+            </NavigationMenu>
           </div>
 
-          {/* Button and Icons */}
-          <div className="hidden lg:flex items-center space-x-6">
-            {/* Icons with Borders */}
+          {/* Account and Cart */}
+          <div className="hidden lg:flex items-center gap-x-6 h-full">
             <div className="flex items-center space-x-4">
-              {icons.map((IconComponent, index) => (
-                <div
-                  key={index}
-                  className={`flex items-center ${
-                    index !== icons.length - 1 ? 'border-r pr-4 border-gray-300' : ''
-                  } ${index !== 0 ? '' : ''}`}
-                >
-                  <IconComponent.icon className="h-6 w-6 text-[#434343] hover:text-[#9B37AE] cursor-pointer" />
-                </div>
-              ))}
+              <LocalizedClientLink
+                className="hover:text-ui-fg-base"
+                href="/account"
+                data-testid="nav-account-link"
+              >
+                <User className="h-6 w-6 text-[#434343] hover:text-[#9B37AE] cursor-pointer" />
+              </LocalizedClientLink>
             </div>
+            <Suspense
+              fallback={
+                <LocalizedClientLink
+                  className="hover:text-ui-fg-base flex gap-2"
+                  href="/cart"
+                  data-testid="nav-cart-link"
+                >
+                  <div className="flex items-center text-[#434343] hover:text-[#9B37AE] cursor-pointer">
+                    <ShoppingBag className="h-6 w-6" />
+                    <span className="ml-1">(0)</span>
+                  </div>
+                </LocalizedClientLink>
+              }
+            >
+              <CartDropdown cart={cart} />
+            </Suspense>
           </div>
 
           {/* Mobile Menu Button */}
@@ -83,9 +137,9 @@ export default function NavBar({
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? (
-                <FiX className="h-6 w-6 text-gray-700" />
+                <X className="h-6 w-6 text-gray-700" />
               ) : (
-                <FiMenu className="h-6 w-6 text-gray-700" />
+                <Menu className="h-6 w-6 text-gray-700" />
               )}
             </button>
           </div>
@@ -102,7 +156,7 @@ export default function NavBar({
           {/* Navigation Links */}
           {menuItems.map((item) => (
             <li key={item._key}>
-              <Link
+              <LocalizedClientLink
                 href={item.link ? getLinkByLinkObject(item.link) || '#' : '#'}
                 className="block hover:bg-gray-200 px-3 py-2 rounded-md font-poppins font-semibold text-[14px] leading-[21px] tracking-[0px] text-[#434343] hover:text-[#9B37AE] hover:underline"
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -111,26 +165,26 @@ export default function NavBar({
                   : {})}
               >
                 {item.text}
-              </Link>
+              </LocalizedClientLink>
             </li>
           ))}
 
           {/* Flag and Icons */}
           <li>
-            <Link
+            <LocalizedClientLink
               href="/account"
               className="block hover:bg-gray-200 px-3 py-2 rounded-md font-poppins font-semibold text-[14px] leading-[21px] tracking-[0px] text-[#434343] hover:text-[#9B37AE] hover:underline"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Account
-            </Link>
-            <Link
+            </LocalizedClientLink>
+            <LocalizedClientLink
               href="/cart"
               className="block hover:bg-gray-200 px-3 py-2 rounded-md font-poppins font-semibold text-[14px] leading-[21px] tracking-[0px] text-[#434343] hover:text-[#9B37AE] hover:underline"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Cart
-            </Link>
+            </LocalizedClientLink>
           </li>
         </ul>
       </div>
