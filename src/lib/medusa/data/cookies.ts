@@ -112,3 +112,17 @@ export const removeCartId = async () => {
   });
 };
 
+export const getSalesChannelId = async () => {
+  const cookies = await nextCookies();
+  return cookies.get('_medusa_sales_channel_id')?.value;
+};
+
+export const setSalesChannelId = async (salesChannelId: string) => {
+  const cookies = await nextCookies();
+  cookies.set('_medusa_sales_channel_id', salesChannelId, {
+    maxAge: 60 * 60 * 24 * 7,
+    httpOnly: true,
+    sameSite: 'strict',
+    secure: process.env.NODE_ENV === 'production',
+  });
+};
