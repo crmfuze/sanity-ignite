@@ -8,6 +8,7 @@ import postList from '../objects/sections/postList';
 import subscribe from '../objects/sections/subscribe';
 import blockContentSection from '../objects/sections/blockContent';
 import featuredProducts from '../objects/sections/featuredProducts';
+import scienceBanner from '../objects/sections/scienceBanner';
 
 const pageSectionsObjects = [
   cardGrid,
@@ -18,7 +19,8 @@ const pageSectionsObjects = [
   postList,
   subscribe,
   blockContentSection,
-  featuredProducts
+  featuredProducts,
+  scienceBanner,
 ];
 
 export default defineField({

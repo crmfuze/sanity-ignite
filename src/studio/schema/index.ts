@@ -22,6 +22,8 @@ import seoTypes from './objects/seo';
 import footer from './singletons/footer';
 import product from './documents/product';
 import featuredProducts from './objects/sections/featuredProducts';
+import scienceBanner from './objects/sections/scienceBanner';
+import icons from './objects/icons';
 
 export const schemaTypes = [
   // Singletons
@@ -47,12 +49,14 @@ export const schemaTypes = [
   subscribe,
   blockContentSection,
   featuredProducts,
+  scienceBanner,
 
   // Objects
   blockContent,
   link,
   button,
   menuItem,
+  icons,
   ...seoTypes,
 
   // Medusa
