@@ -10,6 +10,8 @@ import Header from '@/components/layout/Header';
 import { SanityLive } from '@/lib/sanity/client/live';
 import { handleError } from './client-utils';
 import Main from '@/components/layout/Main';
+import WeglotWrapper from '../../components/layout/weglot';
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled: isDraftMode } = await draftMode();
 
@@ -30,6 +32,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Header />
         <Main>{children}</Main>
         <Footer />
+        {!isDraftMode && <WeglotWrapper />}
       </section>
     </body>
   );
