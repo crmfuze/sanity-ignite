@@ -9,12 +9,12 @@ export const getAuthHeaders = async (): Promise<{ authorization: string } | {}> 
     const cookies = await nextCookies();
     const token = cookies.get('_medusa_jwt')?.value;
 
-    if (token) {
-      return { authorization: `Bearer ${token}` };
+    if (!token) {
+      return {};
     }
 
-    return {};
-  } catch (error) {
+    return { authorization: `Bearer ${token}` };
+  } catch {
     return {};
   }
 };
@@ -29,7 +29,7 @@ export const getCacheTag = async (tag: string): Promise<string> => {
     }
 
     return `${tag}-${cacheId}`;
-  } catch (error) {
+  } catch {
     return '';
   }
 };

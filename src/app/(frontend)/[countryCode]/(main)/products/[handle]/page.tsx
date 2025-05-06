@@ -1,14 +1,12 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getProductByHandle } from '@/lib/medusa/data/products';
+import { getProductByHandle, listProducts } from '@/lib/medusa/data/products';
 import { getRegion, listRegions } from '@/lib/medusa/data/regions';
 import ProductTemplate from '@/components/modules/products/templates';
 import { sanityFetch } from '@/lib/sanity/client/live';
 import { productPageQuery } from '@/lib/sanity/queries/queries';
 import ProductIngredients from '@/components/modules/products/templates/product-ingredients';
 import PageSections from '@/components/sections/PageSections';
-import { sdk } from '@/lib/medusa/config';
-import { getAuthHeaders } from '@/lib/medusa/data/cookies';
 
 type Props = {
   params: Promise<{ countryCode: string; handle: string }>;
@@ -24,19 +22,24 @@ export async function generateStaticParams() {
       return [];
     }
 
-    const { products } = await sdk.store.product.list(
-      { fields: 'handle' },
-      { next: { tags: ['products'] }, ...(await getAuthHeaders()) },
-    );
+    const promises = countryCodes.map(async (country) => {
+      const { response } = await listProducts({
+        countryCode: country,
+        queryParams: { limit: 100, fields: 'handle' },
+      });
 
-    return countryCodes
-      .map((countryCode) =>
-        products.map((product) => ({
-          countryCode,
+      return { country, products: response.products };
+    });
+
+    const countryProducts = await Promise.all(promises);
+
+    return countryProducts
+      .flatMap((countryData) =>
+        countryData.products.map((product) => ({
+          countryCode: countryData.country,
           handle: product.handle,
         })),
       )
-      .flat()
       .filter((param) => param.handle);
   } catch (error) {
     console.error(
