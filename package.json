@@ -42,7 +42,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "resend": "^4.5.0",
-    "sanity": "^3.81.0",
+    "sanity": "^3.88.3",
     "sanity-plugin-icon-picker": "^4.0.0",
     "server-only": "^0.0.1",
     "sonner": "^1.7.1",
