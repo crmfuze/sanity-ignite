@@ -34,8 +34,6 @@ const homeLocation = {
 function resolveHref(documentType?: string, slug?: string): string | undefined {
   // We don't include region code here as it's handled by middleware
   switch (documentType) {
-    case 'post':
-      return slug ? `/blog/${slug}` : undefined;
     case 'page':
       return slug ? `/${slug}` : undefined;
     default:
@@ -71,18 +69,6 @@ export default defineConfig({
             route: '/:countryCode/:slug',
             filter: `_type == "page" && slug.current == $slug || _id == $slug`,
           },
-          {
-            route: '/:countryCode?/:slug',
-            filter: `_type == "page" && slug.current == $slug || _id == $slug`,
-          },
-          {
-            route: '/:countryCode/blog/:slug',
-            filter: `_type == "post" && slug.current == $slug || _id == $slug`,
-          },
-          {
-            route: '/:countryCode?/blog/:slug',
-            filter: `_type == "post" && slug.current == $slug || _id == $slug`,
-          },
         ]),
         // Locations Resolver API allows you to define where data is being used in your application. https://www.sanity.io/docs/presentation-resolver-api#8d8bca7bfcd7
         locations: {
@@ -103,24 +89,6 @@ export default defineConfig({
                   href: resolveHref('page', doc?.slug)!,
                 },
               ],
-            }),
-          }),
-          post: defineLocations({
-            select: {
-              title: 'title',
-              slug: 'slug.current',
-            },
-            resolve: (doc) => ({
-              locations: [
-                {
-                  title: doc?.title || 'Untitled',
-                  href: resolveHref('post', doc?.slug)!,
-                },
-                {
-                  title: 'Home',
-                  href: '/',
-                } satisfies DocumentLocation,
-              ].filter(Boolean) as DocumentLocation[],
             }),
           }),
         },

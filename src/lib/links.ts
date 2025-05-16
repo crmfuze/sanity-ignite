@@ -17,10 +17,6 @@ export const getDocumentLink = (
   switch (_type) {
     case 'page':
       return `${linkBase}/${slug}`;
-    case 'post':
-      return `${linkBase}/blog/${slug}`;
-    case 'category':
-      return `${linkBase}/category/${slug}`;
     case 'homePage':
       return `${linkBase}/`;
     default:

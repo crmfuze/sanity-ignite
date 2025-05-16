@@ -4,7 +4,6 @@ import cta from '../objects/sections/cta';
 import divider from '../objects/sections/divider';
 import hero from '../objects/sections/hero';
 import mediaText from '../objects/sections/mediaText';
-import postList from '../objects/sections/postList';
 import subscribe from '../objects/sections/subscribe';
 import blockContentSection from '../objects/sections/blockContent';
 import featuredProducts from '../objects/sections/featuredProducts';
@@ -16,7 +15,6 @@ const pageSectionsObjects = [
   divider,
   hero,
   mediaText,
-  postList,
   subscribe,
   blockContentSection,
   featuredProducts,

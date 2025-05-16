@@ -2,7 +2,7 @@ import { createRadioListLayout } from '@/utils/schema';
 import { defineField, defineType } from 'sanity';
 import { Link } from 'lucide-react';
 
-const allLinkableTypes = [{ type: 'post' }, { type: 'page' }];
+const allLinkableTypes = [{ type: 'page' }];
 
 export default defineType({
   name: 'link',

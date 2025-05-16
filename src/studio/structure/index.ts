@@ -1,4 +1,4 @@
-import { CogIcon, HomeIcon, DocumentIcon, TagIcon } from '@sanity/icons';
+import { CogIcon, HomeIcon, PackageIcon } from '@sanity/icons';
 import type { StructureResolver } from 'sanity/structure';
 
 /**
@@ -15,25 +15,33 @@ export const structure: StructureResolver = (S) =>
         .title('Home')
         .child(S.document().schemaType('homePage').documentId('homePage'))
         .icon(HomeIcon),
-      S.listItem()
-        .title('Blog Page')
-        .child(S.document().schemaType('blogPage').documentId('blogPage'))
-        .icon(DocumentIcon),
+      S.documentTypeListItem('product').title('Products').icon(PackageIcon),
       // Filter out "AI Assist Context" and "Settings" content from the list of content types
       ...S.documentTypeListItems().filter((listItem) => {
         const id = listItem.getId();
         return typeof id !== 'undefined'
-          ? !['settings', 'homePage', 'assist.instruction.context', 'blogPage', 'footer'].includes(
-              id,
-            )
+          ? ![
+              'settings',
+              'homePage',
+              'assist.instruction.context',
+              'footer',
+              'product',
+            ].includes(id)
           : false;
       }),
       S.listItem()
         .title('Site Settings')
-        .child(S.document().schemaType('settings').documentId('siteSettings'))
+        .child(
+          S.list()
+            .title('Settings Documents')
+            .items([
+              S.listItem()
+                .title('Menu & SEO')
+                .child(S.document().schemaType('settings').documentId('siteSettings')),
+              S.listItem()
+                .title('Footer')
+                .child(S.document().schemaType('footer').documentId('footer')),
+            ]),
+        )
         .icon(CogIcon),
-      S.listItem()
-        .title('Footer')
-        .child(S.document().schemaType('footer').documentId('footer'))
-        .icon(TagIcon),
     ]);

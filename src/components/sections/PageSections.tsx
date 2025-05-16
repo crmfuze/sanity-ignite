@@ -8,7 +8,6 @@ import { Section, Sections } from './types';
 import Hero from './Hero';
 import CTA from './CTA';
 import MediaText from './MediaText';
-import PostList from './PostList';
 import CardGrid from './CardGrid';
 import Divider from './Divider';
 import Subscribe from './Subscribe';
@@ -23,7 +22,6 @@ const SECTION_COMPONENTS: Record<PageSectionstype, ElementType> = {
   mediaText: MediaText,
   cta: CTA,
   subscribe: Subscribe,
-  postList: PostList,
   cardGrid: CardGrid,
   divider: Divider,
   blockContentSection: BlockContent,

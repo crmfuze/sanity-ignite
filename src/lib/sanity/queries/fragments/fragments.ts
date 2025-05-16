@@ -139,14 +139,6 @@ export const mediaTextSectionFragment = /* groq */ `
   button {${buttonFragment}}
 `;
 
-export const categoryFragment = /* groq */ `
-  _id,
-  _type,
-  title,
-  "slug": slug.current,
-  description,
-`;
-
 export const productFragment = /* groq */ `
   _id,
   _type,
@@ -175,48 +167,6 @@ export const productFragment = /* groq */ `
       title,
     }
   }
-`;
-
-export const personFragment = /* groq */ `
-  _id,
-  _type,
-  firstName,
-  lastName,
-  image,
-  role,
-  biography,
-  "slug": slug.current,
-`;
-
-export const postCardFragment = /* groq */ `
-  _type,
-  _id,
-  "status": select(_originalId in path("drafts.**") => "draft", "published"),
-  "title": coalesce(title, "Untitled"),
-  "slug": slug.current,
-  excerpt,
-  image,
-  "categories": categories[]->{${categoryFragment}},
-  "date": coalesce(date, _updatedAt),
-  "author": author->{${personFragment}},
-  "wordCount": count(string::split(coalesce(pt::text(content), ''), " ")),
-`;
-
-export const postFragment = /* groq */ `
-  ${postCardFragment}
-  ${contentFragment}
-  seo {
-    ${seoFragment}
-  },
-`;
-
-export const postListSectionFragment = /* groq */ `
-    _type,
-    heading,
-    numberOfPosts,
-    "posts": *[_type == 'post'] | order(_createdAt desc, _id desc) [0...20] {
-      ${postFragment}
-    }
 `;
 
 export const dividerSectionFragment = /* groq */ `
@@ -283,7 +233,6 @@ export const pageBuilderFragment = /* groq */ `
     _type == 'divider' => {${dividerSectionFragment}},
     _type == 'hero' => {${heroSectionFragment}},
     _type == 'mediaText' => {${mediaTextSectionFragment}},
-    _type == 'postList' => {${postListSectionFragment}},
     _type == 'subscribe' => {${subscribeSectionFragment}},
     _type == 'featuredProducts' => {${featuredProductsSectionFragment}}
   },
