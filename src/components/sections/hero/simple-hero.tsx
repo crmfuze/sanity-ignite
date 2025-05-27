@@ -2,10 +2,10 @@ import { Image } from 'next-sanity/image';
 import { urlForImage } from '@/lib/sanity/client/utils';
 import { type PortableTextBlock } from 'next-sanity';
 import PortableText from '@/components/modules/PortableText';
-import ButtonsGroup from '../modules/ButtonsGroup';
-import type { HeroSection } from './types';
+import ButtonsGroup from '../../modules/ButtonsGroup';
+import type { HeroSection } from '../types';
 
-export default function HeroSection({ section }: { section: HeroSection }) {
+export default function SimpleHero({ section }: { section: HeroSection }) {
   return (
     <section className="bg-[#FEFAFF] py-12">
       <div className="content-container flex flex-col-reverse lg:flex-row  items-center gap-4  ">

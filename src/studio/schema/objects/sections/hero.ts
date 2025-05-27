@@ -8,14 +8,32 @@ export default defineType({
   title: 'Hero',
   fields: [
     defineField({
-      name: 'heading',
+      initialValue: 'image',
+      name: 'mediaType',
+      options: {
+        layout: 'dropdown',
+        list: [
+          { title: 'Image', value: 'image' },
+          { title: 'Large Image', value: 'largeImage' },
+          { title: 'Video', value: 'video' },
+        ],
+      },
+      title: 'Media Type',
       type: 'string',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'heading',
+      type: 'string',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      hidden: ({ parent }) => parent?.mediaType !== 'image',
       name: 'text',
       type: 'blockContent',
     }),
     defineField({
+      hidden: ({ parent }) => parent?.mediaType !== 'image',
       name: 'image',
       type: 'image',
       options: { hotspot: true },
@@ -26,6 +44,33 @@ export default defineType({
           title: 'Alternative text',
         }),
       ],
+      validation: (Rule) =>
+        Rule.custom((value, { parent }) => {
+          const parentType = parent as { mediaType?: string };
+          return parentType?.mediaType === 'image' && !value ? 'Required' : true;
+        }),
+    }),
+    defineField({
+      hidden: ({ parent }) => parent?.mediaType !== 'largeImage',
+      name: 'largeImage',
+      title: 'Large Image',
+      type: 'image',
+      validation: (Rule) =>
+        Rule.custom((value, { parent }) => {
+          const parentType = parent as { mediaType?: string };
+          return parentType?.mediaType === 'largeImage' && !value ? 'Required' : true;
+        }),
+    }),
+    defineField({
+      hidden: ({ parent }) => parent?.mediaType !== 'video',
+      name: 'video',
+      title: 'Video',
+      type: 'mux.video',
+      validation: (Rule) =>
+        Rule.custom((value, { parent }) => {
+          const parentType = parent as { mediaType?: string };
+          return parentType?.mediaType === 'video' && !value ? 'Required' : true;
+        }),
     }),
     defineField({
       name: 'buttons',

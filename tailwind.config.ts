@@ -161,5 +161,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require('tailwindcss-radix')(), require('@vidstack/react/tailwind.cjs')],
+  plugins: [require('tailwindcss-radix')()],
 };

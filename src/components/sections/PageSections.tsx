@@ -5,7 +5,7 @@ import { useOptimistic } from 'next-sanity/hooks';
 import { type SanityDocument } from 'next-sanity';
 import { dataAttr } from '@/lib/sanity/client/utils';
 import { Section, Sections } from './types';
-import Hero from './Hero';
+import Hero from './hero';
 import CTA from './CTA';
 import MediaText from './MediaText';
 import CardGrid from './CardGrid';
