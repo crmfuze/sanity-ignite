@@ -19,6 +19,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  allowedDevOrigins: ["ambrosia.local", "*.ambrosia.local"]
 };
 
 export default nextConfig;
