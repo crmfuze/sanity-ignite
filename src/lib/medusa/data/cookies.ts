@@ -2,7 +2,7 @@
 
 import 'server-only';
 
-import { cookies as nextCookies } from 'next/headers';
+import { cookies as nextCookies, headers as nextHeaders } from 'next/headers';
 
 export const getAuthHeaders = async (): Promise<{ authorization: string } | {}> => {
   try {
@@ -14,6 +14,31 @@ export const getAuthHeaders = async (): Promise<{ authorization: string } | {}> 
     }
 
     return { authorization: `Bearer ${token}` };
+  } catch {
+    return {};
+  }
+};
+
+/**
+ * Gets the subdomain for tracking purposes
+ * @returns 
+ */
+export const getTrackingId = async (): Promise<{ tracking_id: string } | {}> => {
+  try {
+    const headers = await nextHeaders();
+    const host = headers.get('host');
+
+    if (!host) {
+      return {};
+    }
+
+    const parts = host.split('.');
+
+    if (parts.length < 3) {
+      return {};
+    }
+
+    return { tracking_id: parts[0] };
   } catch {
     return {};
   }

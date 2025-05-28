@@ -12,6 +12,7 @@ import {
   getCacheOptions,
   getCacheTag,
   getCartId,
+  getTrackingId,
   removeCartId,
   setCartId,
 } from './cookies';
@@ -65,8 +66,14 @@ export async function getOrSetCart(countryCode: string) {
     ...(await getAuthHeaders()),
   };
 
+  const trackingId = await getTrackingId();
+
   if (!cart) {
-    const cartResp = await sdk.store.cart.create({ region_id: region.id }, {}, headers);
+    const cartResp = await sdk.store.cart.create(
+      { region_id: region.id, metadata: { tracking_id: trackingId } },
+      {},
+      headers,
+    );
     cart = cartResp.cart;
 
     await setCartId(cart.id);
@@ -75,8 +82,13 @@ export async function getOrSetCart(countryCode: string) {
     revalidateTag(cartCacheTag);
   }
 
-  if (cart && cart?.region_id !== region.id) {
-    await sdk.store.cart.update(cart.id, { region_id: region.id }, {}, headers);
+  if (cart && (cart?.region_id !== region.id || cart?.metadata?.tracking_id !== trackingId)) {
+    await sdk.store.cart.update(
+      cart.id,
+      { region_id: region.id, metadata: { tracking_id: trackingId } },
+      {},
+      headers,
+    );
     const cartCacheTag = await getCacheTag('carts');
     revalidateTag(cartCacheTag);
   }
