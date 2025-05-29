@@ -38,7 +38,7 @@ export default function ScienceBanner({ section }: { section: ScienceBannerSecti
       >
         <div className="lg:w-1/2">
           {section.image?.asset && (
-            <div className="relative w-full h-[400px] lg:h-full min-h-[500px]">
+            <div className="relative w-full aspect-[3/2] lg:aspect-[16/9]">
               <Image
                 alt={section.image?.alt || ''}
                 className="rounded-lg object-cover"
@@ -51,7 +51,7 @@ export default function ScienceBanner({ section }: { section: ScienceBannerSecti
         </div>
         <div className={cn("lg:w-1/2 lg:p-12 mt-8 lg:mt-0 flex flex-col justify-center px-6", getContentAlignment())}>
         {section?.scienceBlock?.heading && (
-          <h2 className="text-4xl font-bold leading-tight tracking-tighter lg:text-5xl mb-5 text-gray-900">
+          <h2 className="text-4xl font-bold leading-tight tracking-tighter md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl mb-5 text-gray-900">
             {section.scienceBlock.heading}
           </h2>
         )}

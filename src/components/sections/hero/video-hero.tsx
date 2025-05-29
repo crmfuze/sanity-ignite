@@ -41,7 +41,7 @@ export default function VideoHero({ section }: { section: HeroSection }) {
   );
 
   return (
-    <div className="bg-white py-16">
+    <div className="bg-white py-20">
       <div className="content-container">
         <div className="flex flex-col gap-8 lg:gap-12 items-center lg:items-stretch lg:flex-row lg:justify-center">
           {/* Mobile: always video first, Desktop: respects content position */}
