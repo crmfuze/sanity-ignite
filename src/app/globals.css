@@ -24,6 +24,10 @@
   }
 }
 
+.hero-asset {
+  min-height: min(590px, calc(100vh - var(--header-height) - 1rem));
+}
+
 :root {
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
@@ -116,7 +120,7 @@
   input:focus ~ label {
     @apply left-0;
   }
-  
+
   /* Ensure labels are always visible with proper z-index for Tailwind 4 */
   input ~ label {
     @apply z-10;

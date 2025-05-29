@@ -32,7 +32,7 @@ export default function SimpleHero({ section }: { section: HeroSection }) {
           {section.image?.asset && (
             <Image
               src={urlForImage(section.image)?.url() as string}
-              alt="section?.image?.alt || ''"
+              alt={section?.image?.alt || ''}
               width={722}
               height={444}
               className="w-full"

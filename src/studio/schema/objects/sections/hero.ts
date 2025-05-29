@@ -25,7 +25,11 @@ export default defineType({
     defineField({
       name: 'heading',
       type: 'string',
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) =>
+        Rule.custom((value, { parent }) => {
+          const parentType = parent as { mediaType?: string };
+          return parentType?.mediaType === 'video' || value ? true : 'Required for non-video heroes';
+        }),
     }),
     defineField({
       hidden: ({ parent }) => parent?.mediaType !== 'image',
@@ -73,10 +77,32 @@ export default defineType({
         }),
     }),
     defineField({
+      hidden: ({ parent }) => parent?.mediaType !== 'video',
+      name: 'contentPosition',
+      title: 'Content Position',
+      type: 'string',
+      initialValue: 'right',
+      options: {
+        layout: 'radio',
+        list: [
+          { title: 'Left', value: 'left' },
+          { title: 'Right', value: 'right' },
+        ],
+      },
+      description: 'Choose which side the content (heading and buttons) appears on',
+    }),
+    defineField({
       name: 'buttons',
       type: 'array',
       of: [{ type: 'button' }],
-      validation: (Rule) => Rule.min(2).max(4),
+      validation: (Rule) =>
+        Rule.custom((value, { parent }) => {
+          const parentType = parent as { mediaType?: string };
+          if (parentType?.mediaType === 'video') {
+            return !value || value.length <= 4 ? true : 'Maximum 4 buttons for video heroes';
+          }
+          return value && value.length >= 2 && value.length <= 4 ? true : 'Requires 2-4 buttons for non-video heroes';
+        }),
     }),
   ],
   preview: {

@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useWeglotLanguage } from '@/hooks/use-weglot-language';
 
 const ReactPlayer = dynamic(() => import('react-player'), {
@@ -16,9 +16,11 @@ const ReactPlayer = dynamic(() => import('react-player'), {
 export type VideoProps = {
   src?: string;
   spanishSrc?: string;
+  aspectRatio?: string;
+  controls?: boolean;
 };
 
-export default function Video({ src, spanishSrc }: VideoProps) {
+export default function Video({ src, spanishSrc, aspectRatio, controls }: VideoProps) {
   const [isClient, setIsClient] = useState(false);
   const currentLanguage = useWeglotLanguage();
 
@@ -28,7 +30,7 @@ export default function Video({ src, spanishSrc }: VideoProps) {
 
   // Select the appropriate video URL based on language
   const getVideoUrl = () => {
-    if (currentLanguage === 'es' && spanishSrc) {
+    if (isClient && currentLanguage === 'es' && spanishSrc) {
       return spanishSrc;
     }
     return src;
@@ -45,14 +47,16 @@ export default function Video({ src, spanishSrc }: VideoProps) {
   }
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full" style={{ aspectRatio }}>
       <ReactPlayer
         url={videoUrl}
-        controls={true}
+        controls={controls}
         width="100%"
         height="100%"
         style={{ position: 'absolute', top: 0, left: 0 }}
         key={videoUrl} // Force re-render when URL changes
+        muted
+        playsinline
       />
     </div>
   );

@@ -125,11 +125,13 @@ export const buttonsFragment = /* groq */ `
 
 export const heroSectionFragment = /* groq */ `
   _type,
+  mediaType,
   heading,
   text,
   image,
   largeImage,
   video,
+  contentPosition,
   ${buttonsFragment}
 `;
 
