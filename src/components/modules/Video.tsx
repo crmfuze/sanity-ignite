@@ -55,7 +55,6 @@ export default function Video({ src, spanishSrc, aspectRatio, controls }: VideoP
         height="100%"
         style={{ position: 'absolute', top: 0, left: 0 }}
         key={videoUrl} // Force re-render when URL changes
-        muted
         playsinline
         config={{
           vimeo: {
