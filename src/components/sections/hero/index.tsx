@@ -32,6 +32,8 @@ export default function HeroSection({ section }: { section: HeroSection }) {
             <Image
               src={urlForImage(section.largeImage)?.url() as string}
               alt={section?.image?.alt || ''}
+              width={1200}
+              height={675}
               className="hero-asset w-full rounded-lg object-cover object-center"
             />
           )}
