@@ -21,7 +21,6 @@ import { clientEnv } from '@/env/clientEnv';
 
 // Plugins
 import { iconPicker } from 'sanity-plugin-icon-picker';
-import { muxInput } from 'sanity-plugin-mux-input';
 
 // Define the home location for the presentation tool
 const homeLocation = {
@@ -126,7 +125,6 @@ export default defineConfig({
     assist(),
     visionTool(),
     iconPicker(),
-    muxInput(),
   ],
   schema: {
     types: schemaTypes,

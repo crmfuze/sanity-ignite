@@ -2,7 +2,7 @@ import { stegaClean } from 'next-sanity';
 import type { HeroSection } from '../types';
 import SimpleHero from './simple-hero';
 import LargeHero from './large-hero';
-import MuxPlayer from '@mux/mux-player-react/lazy';
+import Video from '@/components/modules/Video';
 
 export default function HeroSection({ section }: { section: HeroSection }) {
   const mediaType = stegaClean(section.mediaType);
@@ -14,8 +14,8 @@ export default function HeroSection({ section }: { section: HeroSection }) {
       {mediaType === 'image' && <SimpleHero section={section} />}
       {mediaType === 'video' && video && (
         <LargeHero section={section}>
-          {video.asset?.playbackId && (
-            <MuxPlayer loading="viewport" playbackId={video.asset.playbackId} />
+          {video.url && (
+            <Video src={video.url} spanishSrc={video.spanishUrl} />
           )}
         </LargeHero>
       )}

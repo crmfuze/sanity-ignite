@@ -6,12 +6,6 @@ export const twitterFragment = /* groq */ `
   handle,
 `;
 
-export const muxVideoFragment = /* groq */ `
-  playbackId,
-  assetId,
-  filename,
-`;
-
 export const imageFragment = /* groq */ `
   _type,
   crop {
@@ -135,13 +129,7 @@ export const heroSectionFragment = /* groq */ `
   text,
   image,
   largeImage,
-  video {
-    asset -> {
-      playbackId,
-      assetId,
-      filename,
-    }
-  },
+  video,
   ${buttonsFragment}
 `;
 

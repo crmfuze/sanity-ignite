@@ -19,6 +19,7 @@ import product from './documents/product';
 import featuredProducts from './objects/sections/featuredProducts';
 import scienceBanner from './objects/sections/scienceBanner';
 import icons from './objects/icons';
+import video from './objects/video';
 
 export const schemaTypes = [
   // Singletons
@@ -47,6 +48,7 @@ export const schemaTypes = [
   button,
   menuItem,
   icons,
+  video,
   ...seoTypes,
 
   // Medusa
