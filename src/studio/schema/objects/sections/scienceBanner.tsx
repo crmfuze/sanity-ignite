@@ -17,6 +17,13 @@ export default defineType({
       options: { list: ['left', 'right'] },
     }),
     defineField({
+      name: 'contentPosition',
+      type: 'string',
+      initialValue: 'left',
+      title: 'Content position',
+      options: { list: ['left', 'right', 'center'] },
+    }),
+    defineField({
       name: 'image',
       type: 'image',
       options: { hotspot: true },

@@ -13,6 +13,7 @@ import Divider from './Divider';
 import Subscribe from './Subscribe';
 import BlockContent from './BlockContent';
 import FeaturedProducts from './FeaturedProducts';
+import ScienceBanner from './ScienceBanner';
 import { StoreRegion } from '@medusajs/types';
 
 type PageSectionstype = Section['_type'];
@@ -26,6 +27,7 @@ const SECTION_COMPONENTS: Record<PageSectionstype, ElementType> = {
   divider: Divider,
   blockContentSection: BlockContent,
   featuredProducts: FeaturedProducts,
+  scienceBanner: ScienceBanner,
 } as const;
 
 type PageSectionsProps = {

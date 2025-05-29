@@ -11,11 +11,11 @@ export default function SimpleHero({ section }: { section: HeroSection }) {
       <div className="content-container flex flex-col-reverse lg:flex-row  items-center gap-4  ">
         {/* Left Content */}
         <div className="max-w-[600px] w-full text-center lg:text-left ">
-          <h2 className="text-[#9B37AE] font-inter font-bold md:text-[45px] md:leading-[55px] text-[30px] leading-[40px] tracking-normal">
+          <h2 className="text-4xl font-bold leading-tight tracking-tighter lg:text-5xl text-gray-900">
             {section?.heading}
           </h2>
           <PortableText
-            className="mt-4 text-[#434343] text-sm md:text-[18px] md:leading-[33px] font-normal tracking-normal font-['Poppins']"
+            className="mt-4 text-[#434343] text-sm md:text-[18px] md:leading-[33px] font-normal tracking-normal"
             value={section.text as PortableTextBlock[]}
           />
           {section?.buttons && section?.buttons.length ? (

@@ -57,6 +57,18 @@ export default function Video({ src, spanishSrc, aspectRatio, controls }: VideoP
         key={videoUrl} // Force re-render when URL changes
         muted
         playsinline
+        config={{
+          vimeo: {
+            playerOptions: {
+              title: false,
+              byline: false,
+              portrait: false,
+              share: false,
+              vimeo_logo: false,
+              controls: controls,
+            }
+          }
+        }}
       />
     </div>
   );

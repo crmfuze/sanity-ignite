@@ -8,8 +8,6 @@ export default function VideoHero({ section }: { section: HeroSection }) {
   const contentPosition = stegaClean(section.contentPosition) || 'right';
   const isContentLeft = contentPosition === 'left';
   
-  console.log('VideoHero contentPosition:', contentPosition, 'isContentLeft:', isContentLeft);
-  
   const videoSection = (
     <div className="w-full lg:w-2/3">
       {section.video?.url && (
@@ -28,7 +26,7 @@ export default function VideoHero({ section }: { section: HeroSection }) {
   const contentSection = (section.heading || (section?.buttons && section?.buttons.length > 0)) && (
     <div className="w-full lg:w-1/3 flex flex-col justify-center bg-[#FEFAFF] rounded-2xl p-8 lg:p-10">
       {section.heading && (
-        <h2 className="text-3xl font-bold leading-tight tracking-tighter lg:text-4xl mb-6 text-gray-900">
+        <h2 className="text-4xl font-bold leading-tight tracking-tighter lg:text-5xl mb-6 text-gray-900">
           {section.heading}
         </h2>
       )}
@@ -45,18 +43,27 @@ export default function VideoHero({ section }: { section: HeroSection }) {
   return (
     <div className="bg-white py-16">
       <div className="content-container">
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-stretch">
-          {isContentLeft ? (
-            <>
-              {contentSection}
-              {videoSection}
-            </>
-          ) : (
-            <>
-              {videoSection}
-              {contentSection}
-            </>
-          )}
+        <div className="flex flex-col gap-8 lg:gap-12 items-center lg:items-stretch lg:flex-row lg:justify-center">
+          {/* Mobile: always video first, Desktop: respects content position */}
+          <div className="flex flex-col lg:hidden gap-8">
+            {videoSection}
+            {contentSection}
+          </div>
+          
+          {/* Desktop: respects left/right positioning */}
+          <div className="hidden lg:flex lg:flex-row gap-8 lg:gap-12 items-stretch lg:justify-center">
+            {isContentLeft ? (
+              <>
+                {contentSection}
+                {videoSection}
+              </>
+            ) : (
+              <>
+                {videoSection}
+                {contentSection}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>
