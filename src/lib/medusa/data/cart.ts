@@ -17,6 +17,7 @@ import {
   setCartId,
 } from './cookies';
 import { getRegion } from './regions';
+import { getOrSetSalesChannel } from './customer';
 
 /**
  * Retrieves a cart by its ID. If no ID is provided, it will use the cart ID from the cookies.
@@ -60,17 +61,27 @@ export async function getOrSetCart(countryCode: string) {
     throw new Error(`Region not found for country code: ${countryCode}`);
   }
 
+  const salesChannel = await getOrSetSalesChannel();
+  
+  if (!salesChannel?.id) {
+    throw new Error('Sales channel not found');
+  }
+
   let cart = await retrieveCart();
 
   const headers = {
     ...(await getAuthHeaders()),
   };
 
-  const trackingId = await getTrackingId();
+  const trackingId = { ...(await getTrackingId()) };
 
   if (!cart) {
     const cartResp = await sdk.store.cart.create(
-      { region_id: region.id, metadata: { tracking_id: trackingId } },
+      { 
+        region_id: region.id, 
+        sales_channel_id: salesChannel.id,
+        metadata: { ...trackingId } 
+      },
       {},
       headers,
     );
@@ -82,10 +93,19 @@ export async function getOrSetCart(countryCode: string) {
     revalidateTag(cartCacheTag);
   }
 
-  if (cart && (cart?.region_id !== region.id || cart?.metadata?.tracking_id !== trackingId)) {
+  if (
+    cart &&
+    (cart?.region_id !== region.id || 
+     cart?.metadata?.tracking_id !== trackingId.tracking_id ||
+     cart?.sales_channel_id !== salesChannel.id)
+  ) {
     await sdk.store.cart.update(
       cart.id,
-      { region_id: region.id, metadata: { tracking_id: trackingId } },
+      { 
+        region_id: region.id, 
+        sales_channel_id: salesChannel.id,
+        metadata: { ...trackingId } 
+      },
       {},
       headers,
     );

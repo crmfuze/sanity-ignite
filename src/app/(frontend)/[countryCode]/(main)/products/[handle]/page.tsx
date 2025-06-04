@@ -7,6 +7,7 @@ import { sanityFetch } from '@/lib/sanity/client/live';
 import { productPageQuery } from '@/lib/sanity/queries/queries';
 import ProductIngredients from '@/components/modules/products/templates/product-ingredients';
 import PageSections from '@/components/sections/PageSections';
+import { getOrSetSalesChannel } from '@/lib/medusa/data/customer';
 
 type Props = {
   params: Promise<{ countryCode: string; handle: string }>;
@@ -22,9 +23,12 @@ export async function generateStaticParams() {
       return [];
     }
 
+    const sales_channel_id = await getOrSetSalesChannel().then((channel) => channel?.id);
+
     const promises = countryCodes.map(async (country) => {
       const { response } = await listProducts({
         countryCode: country,
+        sales_channel_id,
         queryParams: { limit: 100, fields: 'handle' },
       });
 
@@ -60,7 +64,13 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     notFound();
   }
 
-  const product = await getProductByHandle(handle, region.id);
+  const salesChannel = await getOrSetSalesChannel();
+  
+  if (!salesChannel?.id) {
+    notFound();
+  }
+  
+  const product = await getProductByHandle(handle, region.id, salesChannel.id);
 
   if (!product) {
     notFound();
@@ -86,7 +96,13 @@ export default async function ProductPage(props: Props) {
     notFound();
   }
 
-  const pricedProduct = await getProductByHandle(params.handle, region.id);
+  const salesChannel = await getOrSetSalesChannel();
+  
+  if (!salesChannel?.id) {
+    notFound();
+  }
+  
+  const pricedProduct = await getProductByHandle(params.handle, region.id, salesChannel.id);
 
   if (!pricedProduct) {
     notFound();
@@ -107,7 +123,13 @@ export default async function ProductPage(props: Props) {
     <div>
       <ProductTemplate product={pricedProduct} region={region} countryCode={params.countryCode} />
       {ingredients && <ProductIngredients product={pricedProduct} ingredients={ingredients} />}
-      <PageSections documentId={_id} documentType={_type} sections={pageSections} region={region} />
+      <PageSections 
+        documentId={_id} 
+        documentType={_type} 
+        sections={pageSections} 
+        region={region} 
+        salesChannelId={salesChannel.id}
+      />
     </div>
   );
 }

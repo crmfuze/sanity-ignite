@@ -1,22 +1,26 @@
-import { type HttpTypes } from "@medusajs/types";
+import { type HttpTypes } from '@medusajs/types';
 
-import { listProducts } from "@/lib/medusa/data/products";
-import { getRegion } from "@/lib/medusa/data/regions";
+import { listProducts } from '@/lib/medusa/data/products';
+import { getRegion } from '@/lib/medusa/data/regions';
 
-import Product from "../product-preview";
+import Product from '../product-preview';
+import { getOrSetSalesChannel } from '@/lib/medusa/data/customer';
 
 type RelatedProductsProps = {
   product: HttpTypes.StoreProduct;
   countryCode: string;
 };
 
-export default async function RelatedProducts({
-  product,
-  countryCode,
-}: RelatedProductsProps) {
+export default async function RelatedProducts({ product, countryCode }: RelatedProductsProps) {
   const region = await getRegion(countryCode);
 
   if (!region) {
+    return null;
+  }
+
+  const sales_channel = await getOrSetSalesChannel();
+
+  if (!sales_channel) {
     return null;
   }
 
@@ -29,19 +33,16 @@ export default async function RelatedProducts({
     queryParams.collection_id = [product.collection_id];
   }
   if (product.tags) {
-    queryParams.tag_id = product.tags
-      .map((t) => t.id)
-      .filter(Boolean) as string[];
+    queryParams.tag_id = product.tags.map((t) => t.id).filter(Boolean) as string[];
   }
   queryParams.is_giftcard = false;
 
   const products = await listProducts({
     queryParams,
     countryCode,
+    sales_channel_id: sales_channel.id,
   }).then(({ response }) => {
-    return response.products.filter(
-      (responseProduct) => responseProduct.id !== product.id,
-    );
+    return response.products.filter((responseProduct) => responseProduct.id !== product.id);
   });
 
   if (!products.length) {
@@ -51,9 +52,7 @@ export default async function RelatedProducts({
   return (
     <div className="product-page-constraint">
       <div className="flex flex-col items-center text-center mb-16">
-        <span className="text-base-regular text-gray-600 mb-6">
-          Related products
-        </span>
+        <span className="text-base-regular text-gray-600 mb-6">Related products</span>
         <p className="text-2xl-regular text-ui-fg-base max-w-lg">
           You might also want to check out these products.
         </p>

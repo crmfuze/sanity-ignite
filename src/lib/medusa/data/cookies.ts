@@ -21,7 +21,7 @@ export const getAuthHeaders = async (): Promise<{ authorization: string } | {}> 
 
 /**
  * Gets the subdomain for tracking purposes
- * @returns 
+ * @returns
  */
 export const getTrackingId = async (): Promise<{ tracking_id: string } | {}> => {
   try {
@@ -111,3 +111,4 @@ export const removeCartId = async () => {
     maxAge: -1,
   });
 };
+

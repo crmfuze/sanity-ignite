@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use server';
 
-import type { HttpTypes } from '@medusajs/types';
+import { HttpTypes } from '@medusajs/types';
 import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -17,6 +17,7 @@ import {
   removeCartId,
   setAuthToken,
 } from './cookies';
+import { retrieveReplicatedSiteInfo } from './distributor';
 
 export const retrieveCustomer = async (): Promise<HttpTypes.StoreCustomer | null> => {
   const authHeaders = await getAuthHeaders();
@@ -44,6 +45,60 @@ export const retrieveCustomer = async (): Promise<HttpTypes.StoreCustomer | null
     .then(({ customer }) => customer)
     .catch(() => null);
 };
+
+export const retrieveCustomerSalesChannel = async (
+  customer_id: string,
+): Promise<HttpTypes.AdminSalesChannel | null> => {
+  const headers = {
+    ...(await getAuthHeaders()),
+  };
+
+  const response = await sdk.client
+    .fetch<{ sales_channel: HttpTypes.AdminSalesChannel }>(`/store/sales-channels/${customer_id}`, {
+      method: 'GET',
+      headers,
+      cache: `no-cache`,
+    })
+    .then(({ sales_channel }) => sales_channel)
+    .catch(() => null);
+
+  console.log('-------------------------------------------------------');
+  console.log(response);
+  console.log('-------------------------------------------------------');
+
+  return response
+};
+
+export const getDefaultSalesChannel = async (): Promise<HttpTypes.AdminSalesChannel | null> => {
+  const headers = {
+    ...(await getAuthHeaders()),
+  };
+
+  const response = await sdk.client
+    .fetch<{ default_sales_channel: HttpTypes.AdminSalesChannel }>(
+      `/store/sales-channels/default`,
+      {
+        method: 'GET',
+        headers,
+        cache: 'no-cache',
+      },
+    )
+    .then(({ default_sales_channel }) => default_sales_channel || null)
+    .catch(() => null);
+
+  return response;
+};
+
+export async function getOrSetSalesChannel() {
+  const customer = await retrieveCustomer();
+
+  // If customer exists, try to get their sales channel
+  if (!customer) {
+    return await getDefaultSalesChannel();
+  }
+
+  return await retrieveCustomerSalesChannel(customer.id);
+}
 
 export const updateCustomer = async (body: HttpTypes.StoreUpdateCustomer) => {
   const headers = {
@@ -109,6 +164,10 @@ export async function signup(_currentState: unknown, formData: FormData) {
 export async function login(_currentState: unknown, formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
+
+  const replicated_site_info = await retrieveReplicatedSiteInfo();
+
+  console.log(replicated_site_info);
 
   try {
     await sdk.auth.login('customer', 'mlmsoft-auth', { email, password }).then(async (token) => {
@@ -186,7 +245,7 @@ export const addCustomerAddress = async (
 
   return sdk.store.customer
     .createAddress(address, {}, headers)
-    .then(async ({ customer }) => {
+    .then(async () => {
       const customerCacheTag = await getCacheTag('customers');
       revalidateTag(customerCacheTag);
       return { success: true, error: null };

@@ -14,11 +14,13 @@ export const listProducts = async ({
   queryParams,
   countryCode,
   regionId,
+  sales_channel_id,
 }: {
   pageParam?: number;
   queryParams?: HttpTypes.FindParams & HttpTypes.StoreProductParams;
   countryCode?: string;
   regionId?: string;
+  sales_channel_id?: string;
 }): Promise<{
   response: { products: HttpTypes.StoreProduct[]; count: number };
   nextPage: number | null;
@@ -26,6 +28,10 @@ export const listProducts = async ({
 }> => {
   if (!countryCode && !regionId) {
     throw new Error('Country code or region ID is required');
+  }
+
+  if (!sales_channel_id) {
+    throw new Error('Sales Channel Id is required');
   }
 
   const limit = queryParams?.limit || 12;
@@ -62,6 +68,7 @@ export const listProducts = async ({
         limit,
         offset,
         region_id: region?.id,
+        sales_channel_id: sales_channel_id,
         fields: '*variants.calculated_price,+variants.inventory_quantity,+metadata,+tags',
         ...queryParams,
       },
@@ -92,11 +99,13 @@ export const listProductsWithSort = async ({
   queryParams,
   sortBy = 'created_at',
   countryCode,
+  salesChannelId,
 }: {
   page?: number;
   queryParams?: HttpTypes.FindParams & HttpTypes.StoreProductParams;
   sortBy?: SortOptions;
   countryCode: string;
+  salesChannelId: string;
 }): Promise<{
   response: { products: HttpTypes.StoreProduct[]; count: number };
   nextPage: number | null;
@@ -113,6 +122,7 @@ export const listProductsWithSort = async ({
       limit: 100,
     },
     countryCode,
+    sales_channel_id: salesChannelId,
   });
 
   const sortedProducts = sortProducts(products, sortBy);
@@ -136,9 +146,11 @@ export const listProductsWithSort = async ({
 export const listProductsById = async ({
   productIds,
   region,
+  salesChannelId,
 }: {
   productIds: string[];
   region: StoreRegion;
+  salesChannelId: string;
 }): Promise<{
   products: HttpTypes.StoreProduct[];
 }> => {
@@ -160,6 +172,7 @@ export const listProductsById = async ({
       query: {
         id: productIds,
         region_id: region.id,
+        sales_channel_id: salesChannelId,
         fields: '*variants.calculated_price,+variants.inventory_quantity,+metadata,+tags',
       },
       headers,
@@ -171,7 +184,7 @@ export const listProductsById = async ({
     });
 };
 
-export const getProductByHandle = async (handle: string, regionId: string) => {
+export const getProductByHandle = async (handle: string, regionId: string, salesChannelId: string) => {
   const headers = {
     ...(await getAuthHeaders()),
   };
@@ -187,6 +200,7 @@ export const getProductByHandle = async (handle: string, regionId: string) => {
       query: {
         handle,
         region_id: regionId,
+        sales_channel_id: salesChannelId,
         fields: '*variants.calculated_price,+variants.inventory_quantity,+metadata,+tags',
       },
       headers,

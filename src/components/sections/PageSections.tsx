@@ -35,6 +35,7 @@ type PageSectionsProps = {
   documentType: string;
   sections?: Sections;
   region?: StoreRegion;
+  salesChannelId?: string;
 };
 
 type PageData = SanityDocument<{
@@ -45,6 +46,7 @@ export default function PageSections({
   documentId,
   documentType,
   region,
+  salesChannelId,
   sections: initialSections = [],
 }: PageSectionsProps) {
   const sections = useOptimistic<Sections, PageData>(
@@ -98,7 +100,11 @@ export default function PageSections({
               path: `pageSections[_key=="${_key}"]`,
             })}
           >
-            <SectionComponent section={sectionProps} region={region} />
+            <SectionComponent 
+              section={sectionProps} 
+              region={region} 
+              salesChannelId={salesChannelId}
+            />
           </div>
         );
       })}

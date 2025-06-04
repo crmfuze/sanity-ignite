@@ -5,6 +5,7 @@ import PageSections from '@/components/sections/PageSections';
 import { notFound } from 'next/navigation';
 import { SeoType } from '@/types/seo';
 import { getRegion } from '@/lib/medusa/data/regions';
+import { getOrSetSalesChannel } from '@/lib/medusa/data/customer';
 
 export async function generateMetadata() {
   const { data: homePage } = await sanityFetch({
@@ -28,14 +29,21 @@ export default async function Page(props: { params: Promise<{ countryCode: strin
   const { countryCode } = params;
 
   const region = await getRegion(countryCode);
+  const salesChannel = await getOrSetSalesChannel();
 
-  if (!homePage || !region) {
+  if (!homePage || !region || !salesChannel?.id) {
     notFound();
   }
 
   const { _id, _type, pageSections } = homePage;
 
   return (
-    <PageSections documentId={_id} documentType={_type} sections={pageSections} region={region} />
+    <PageSections 
+      documentId={_id} 
+      documentType={_type} 
+      sections={pageSections} 
+      region={region} 
+      salesChannelId={salesChannel.id}
+    />
   );
 }

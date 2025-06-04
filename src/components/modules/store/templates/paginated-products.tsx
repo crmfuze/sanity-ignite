@@ -3,6 +3,7 @@ import { getRegion } from '@/lib/medusa/data/regions';
 import ProductPreview from '@/components/modules/products/components/product-preview';
 import { Pagination } from '@/components/modules/store/components/pagination';
 import { type SortOptions } from '@/components/modules/store/components/refinement-list/sort-products';
+import { getOrSetSalesChannel } from '@/lib/medusa/data/customer';
 
 const PRODUCT_LIMIT = 12;
 
@@ -55,6 +56,14 @@ export default async function PaginatedProducts({
     return null;
   }
 
+  const salesChannel = await getOrSetSalesChannel();
+  const salesChannelId = salesChannel?.id;
+
+  if (!salesChannelId) {
+    console.error('No sales channel available');
+    return null;
+  }
+
   const {
     response: { products, count },
   } = await listProductsWithSort({
@@ -62,6 +71,7 @@ export default async function PaginatedProducts({
     queryParams,
     sortBy,
     countryCode,
+    salesChannelId,
   });
 
   const totalPages = Math.ceil(count / PRODUCT_LIMIT);

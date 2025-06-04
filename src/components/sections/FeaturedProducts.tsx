@@ -16,9 +16,11 @@ import ProductCard from '@/components/modules/ProductCard';
 export default function FeaturedProducts({
   section,
   region,
+  salesChannelId,
 }: {
   section: FeaturedProductsSection;
   region: StoreRegion;
+  salesChannelId: string;
 }) {
   const { title, products } = section;
   const [storeProducts, setStoreProducts] = useState<HttpTypes.StoreProduct[]>([]);
@@ -26,7 +28,7 @@ export default function FeaturedProducts({
 
   useEffect(() => {
     const fetchProducts = async () => {
-      if (!products || products.length === 0) {
+      if (!products || products.length === 0 || !salesChannelId) {
         setLoading(false);
         return;
       }
@@ -39,6 +41,7 @@ export default function FeaturedProducts({
         const { products: fetchedProducts } = await listProductsById({
           productIds,
           region,
+          salesChannelId,
         });
 
         setStoreProducts(fetchedProducts);
@@ -50,7 +53,7 @@ export default function FeaturedProducts({
     };
 
     fetchProducts();
-  }, [products, region]);
+  }, [products, region, salesChannelId]);
 
   if (loading) {
     return (
