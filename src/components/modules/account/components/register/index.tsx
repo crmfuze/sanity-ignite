@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useActionState } from "react";
+import { useActionState } from 'react';
 
-import { signup } from "@/lib/medusa/data/customer";
-import { LOGIN_VIEW } from "@/components/modules/account/templates/login-template";
-import ErrorMessage from "@/components/modules/checkout/components/error-message";
-import { SubmitButton } from "@/components/modules/checkout/components/submit-button";
-import Input from "@/components/modules/common/components/input";
-import NativeSelect from "@/components/modules/common/components/native-select";
-import LocalizedClientLink from "@/components/modules/common/components/localized-client-link";
+import { signup } from '@/lib/medusa/data/customer';
+import { LOGIN_VIEW } from '@/components/modules/account/templates/login-template';
+import ErrorMessage from '@/components/modules/checkout/components/error-message';
+import { SubmitButton } from '@/components/modules/checkout/components/submit-button';
+import Input from '@/components/modules/common/components/input';
+import NativeSelect from '@/components/modules/common/components/native-select';
+import LocalizedClientLink from '@/components/modules/common/components/localized-client-link';
 
 type Props = {
   setCurrentView: (view: LOGIN_VIEW) => void;
@@ -18,16 +18,11 @@ const Register = ({ setCurrentView }: Props) => {
   const [message, formAction] = useActionState(signup, null);
 
   return (
-    <div
-      className="max-w-sm flex flex-col items-center"
-      data-testid="register-page"
-    >
-      <h1 className="text-large-semi uppercase mb-6">
-        Become an Ambrosia Global Member
-      </h1>
+    <div className="max-w-sm flex flex-col items-center" data-testid="register-page">
+      <h1 className="text-large-semi uppercase mb-6">Become an Ambrosia Global Member</h1>
       <p className="text-center text-base-regular text-ui-fg-base mb-4">
-        Create your Ambrosia Global Member profile, and get access to an enhanced
-        shopping experience.
+        Create your Ambrosia Global Member profile, and get access to an enhanced shopping
+        experience.
       </p>
       <form className="w-full flex flex-col" action={formAction}>
         <div className="flex flex-col w-full gap-y-2">
@@ -46,6 +41,24 @@ const Register = ({ setCurrentView }: Props) => {
             data-testid="last-name-input"
           />
           <Input
+            label="Password"
+            name="password"
+            required
+            type="password"
+            minLength={9}
+            autoComplete="new-password"
+            data-testid="password-input"
+          />
+          <Input
+            label="Password"
+            name="password"
+            required
+            minLength={9}
+            type="password"
+            autoComplete="new-password"
+            data-testid="password-input"
+          />
+          <Input
             label="Email"
             name="email"
             required
@@ -57,6 +70,7 @@ const Register = ({ setCurrentView }: Props) => {
             label="Phone"
             name="phone"
             type="tel"
+            required
             autoComplete="tel"
             data-testid="phone-input"
           />
@@ -72,44 +86,22 @@ const Register = ({ setCurrentView }: Props) => {
               <option value="es">Spanish</option>
             </NativeSelect>
           </div>
-          {/* <Input
+          <Input
             label="Birth Date"
             name="birthdate"
             type="date"
             autoComplete="bday"
             data-testid="birthdate-input"
-          /> */}
-          <Input
-            label="Password"
-            name="password"
-            required
-            type="password"
-            autoComplete="new-password"
-            data-testid="password-input"
-          />
-          <Input
-            label="Password"
-            name="password"
-            required
-            type="password"
-            autoComplete="new-password"
-            data-testid="password-input"
           />
         </div>
         <ErrorMessage error={message} data-testid="register-error" />
         <span className="text-center text-ui-fg-base text-small-regular mt-6">
-          By creating an account, you agree to Ambrosia Global LLC&apos;s{" "}
-          <LocalizedClientLink
-            href="/content/privacy-policy"
-            className="underline"
-          >
+          By creating an account, you agree to Ambrosia Global LLC&apos;s{' '}
+          <LocalizedClientLink href="/content/privacy-policy" className="underline">
             Privacy Policy
-          </LocalizedClientLink>{" "}
-          and{" "}
-          <LocalizedClientLink
-            href="/content/terms-of-use"
-            className="underline"
-          >
+          </LocalizedClientLink>{' '}
+          and{' '}
+          <LocalizedClientLink href="/content/terms-of-use" className="underline">
             Terms of Use
           </LocalizedClientLink>
           .
@@ -119,11 +111,8 @@ const Register = ({ setCurrentView }: Props) => {
         </SubmitButton>
       </form>
       <span className="text-center text-ui-fg-base text-small-regular mt-6">
-        Already a member?{" "}
-        <button
-          onClick={() => setCurrentView(LOGIN_VIEW.SIGN_IN)}
-          className="underline"
-        >
+        Already a member?{' '}
+        <button onClick={() => setCurrentView(LOGIN_VIEW.SIGN_IN)} className="underline">
           Sign in
         </button>
         .
