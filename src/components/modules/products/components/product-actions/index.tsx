@@ -66,9 +66,6 @@ export default function ProductActions({ product, disabled }: ProductActionsProp
       return isEqual(variantOptions, options);
     });
   }, [product.variants, options]);
-  console.log('-------------------------------------------------------');
-  console.log(selectedVariant);
-  console.log('-------------------------------------------------------');
 
   // check if the selected variant is in stock
   const inStock = useMemo(() => {

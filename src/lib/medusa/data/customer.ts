@@ -62,11 +62,7 @@ export const retrieveCustomerSalesChannel = async (
     .then(({ sales_channel }) => sales_channel)
     .catch(() => null);
 
-  console.log('-------------------------------------------------------');
-  console.log(response);
-  console.log('-------------------------------------------------------');
-
-  return response
+  return response;
 };
 
 export const getDefaultSalesChannel = async (): Promise<HttpTypes.AdminSalesChannel | null> => {
