@@ -82,17 +82,10 @@ const Register = ({ setCurrentView }: Props) => {
               defaultValue=""
               required
             >
-              <option value="en-EN">English</option>
+              <option value="en-US">English</option>
               <option value="es">Spanish</option>
             </NativeSelect>
           </div>
-          <Input
-            label="Birth Date"
-            name="birthdate"
-            type="date"
-            autoComplete="bday"
-            data-testid="birthdate-input"
-          />
         </div>
         <ErrorMessage error={message} data-testid="register-error" />
         <span className="text-center text-ui-fg-base text-small-regular mt-6">

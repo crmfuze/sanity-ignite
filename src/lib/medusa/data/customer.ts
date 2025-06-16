@@ -119,6 +119,7 @@ export async function signup(_currentState: unknown, formData: FormData) {
     first_name: formData.get('first_name') as string,
     last_name: formData.get('last_name') as string,
     phone: formData.get('phone') as string,
+    language: formData.get('language') as string,
   };
 
   try {
@@ -134,7 +135,15 @@ export async function signup(_currentState: unknown, formData: FormData) {
     };
 
     const { customer: createdCustomer } = await sdk.store.customer.create(
-      customerForm,
+      {
+        email: customerForm.email,
+        first_name: customerForm.first_name,
+        last_name: customerForm.last_name,
+        phone: customerForm.phone,
+        metadata: {
+          language: customerForm.language,
+        },
+      },
       {},
       headers,
     );
@@ -160,10 +169,6 @@ export async function signup(_currentState: unknown, formData: FormData) {
 export async function login(_currentState: unknown, formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
-
-  const replicated_site_info = await retrieveReplicatedSiteInfo();
-
-  console.log(replicated_site_info);
 
   try {
     await sdk.auth.login('customer', 'mlmsoft-auth', { email, password }).then(async (token) => {
