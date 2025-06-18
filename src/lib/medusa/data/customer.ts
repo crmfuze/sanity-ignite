@@ -172,11 +172,13 @@ export async function login(_currentState: unknown, formData: FormData) {
 
   try {
     await sdk.auth.login('customer', 'mlmsoft-auth', { email, password }).then(async (token) => {
+      console.log(token);
       await setAuthToken(token as string);
       const customerCacheTag = await getCacheTag('customers');
       revalidateTag(customerCacheTag);
     });
   } catch (error: any) {
+    console.log(error);
     return error.toString();
   }
 
