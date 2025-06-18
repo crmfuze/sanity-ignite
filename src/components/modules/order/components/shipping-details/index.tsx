@@ -9,6 +9,12 @@ type ShippingDetailsProps = {
 };
 
 const ShippingDetails = ({ order }: ShippingDetailsProps) => {
+  const requiresShipping = order.items?.some((item) => item.requires_shipping) ?? false;
+  
+  if (!requiresShipping) {
+    return null;
+  }
+
   return (
     <div>
       <Heading level="h2" className="flex flex-row text-3xl-regular my-6">
@@ -56,9 +62,9 @@ const ShippingDetails = ({ order }: ShippingDetailsProps) => {
         >
           <Text className="txt-medium-plus text-ui-fg-base mb-1">Method</Text>
           <Text className="txt-medium text-ui-fg-subtle">
-            {(order as any).shipping_methods[0]?.name} (
+            {order.shipping_methods?.[0]?.name} (
             {convertToLocale({
-              amount: order.shipping_methods?.[0].total ?? 0,
+              amount: order.shipping_methods?.[0]?.total ?? 0,
               currency_code: order.currency_code,
             })
               .replace(/,/g, "")

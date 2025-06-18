@@ -349,6 +349,65 @@ export async function removeGiftCard(
   //   }
 }
 
+export async function resetCart() {
+  const currentCart = await retrieveCart();
+
+  if (!currentCart) {
+    return null;
+  }
+
+  // Get current cart items to re-add them
+  const items = currentCart.items || [];
+  const region = currentCart.region;
+  const salesChannelId = currentCart.sales_channel_id;
+
+  // Remove current cart ID to force creation of new cart
+  removeCartId();
+
+  const headers = {
+    ...(await getAuthHeaders()),
+  };
+
+  const trackingId = { ...(await getTrackingId()) };
+
+  // Create new cart
+  const cartResp = await sdk.store.cart.create(
+    {
+      region_id: region?.id,
+      sales_channel_id: salesChannelId,
+      metadata: { ...trackingId },
+    },
+    {},
+    headers,
+  );
+
+  const newCart = cartResp.cart;
+  await setCartId(newCart.id);
+
+  // Re-add items to new cart
+  for (const item of items) {
+    if (item.variant_id) {
+      await sdk.store.cart.createLineItem(
+        newCart.id,
+        {
+          variant_id: item.variant_id,
+          quantity: item.quantity,
+        },
+        {},
+        headers,
+      );
+    }
+  }
+
+  const cartCacheTag = await getCacheTag('carts');
+  revalidateTag(cartCacheTag);
+
+  const fulfillmentCacheTag = await getCacheTag('fulfillment');
+  revalidateTag(fulfillmentCacheTag);
+
+  return retrieveCart();
+}
+
 export async function submitPromotionForm(currentState: unknown, formData: FormData) {
   const code = formData.get('code') as string;
   try {
@@ -409,7 +468,12 @@ export async function setAddresses(currentState: unknown, formData: FormData) {
     return e.message;
   }
 
-  redirect(`/${formData.get('shipping_address.country_code')}/checkout?step=delivery`);
+  // Check if cart requires shipping to determine next step
+  const cart = await retrieveCart();
+  const requiresShipping = cart?.items?.some((item) => item.requires_shipping) ?? false;
+  const nextStep = requiresShipping ? 'delivery' : 'payment';
+
+  redirect(`/${formData.get('shipping_address.country_code')}/checkout?step=${nextStep}`);
 }
 
 /**
@@ -438,7 +502,9 @@ export async function placeOrder(cartId?: string) {
     .catch(medusaError);
 
   if (cartRes?.type === 'order') {
-    const countryCode = cartRes.order.shipping_address?.country_code?.toLowerCase();
+    const countryCode =
+      cartRes.order.shipping_address?.country_code?.toLowerCase() ||
+      cartRes.order.billing_address?.country_code?.toLowerCase();
 
     const orderCacheTag = await getCacheTag('orders');
     revalidateTag(orderCacheTag);
