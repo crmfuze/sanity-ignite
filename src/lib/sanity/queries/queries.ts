@@ -3,6 +3,7 @@ import {
   pageFragment,
   menuFragment,
   pageBuilderFragment,
+  homepageHeroFragment,
 } from './fragments/fragments';
 
 export const settingsQuery = defineQuery(`*[_type == "settings" && _id == "siteSettings"][0]{
@@ -16,6 +17,7 @@ export const homePageQuery = defineQuery(`*[_type == "homePage"][0]{
   _id,
   _type,
   ...,
+  ${homepageHeroFragment},
   ${pageFragment}
 }`);
 

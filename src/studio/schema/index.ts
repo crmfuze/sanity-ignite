@@ -1,5 +1,5 @@
 import page from './documents/page';
-import homePage from './singletons/homePage';
+import homePage from './singletons/home/homePage';
 import cta from './objects/sections/cta';
 import hero from './objects/sections/hero';
 import mediaText from './objects/sections/mediaText';

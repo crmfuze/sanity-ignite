@@ -1,7 +1,8 @@
 import { defineType, defineField } from 'sanity';
 import { HomeIcon } from '@sanity/icons';
-import pageSections from '../fields/pageSections';
-import { defaultFieldGroups } from '../config/fieldGroups';
+import pageSections from '../../fields/pageSections';
+import hero from './hero';
+import { defaultFieldGroups } from '../../config/fieldGroups';
 
 export default defineType({
   name: 'homePage',
@@ -18,6 +19,7 @@ export default defineType({
       initialValue: 'Home Page',
       group: 'content',
     }),
+    hero,
     pageSections,
     defineField({
       title: 'SEO & Metadata',

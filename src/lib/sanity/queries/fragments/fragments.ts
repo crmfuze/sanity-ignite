@@ -268,3 +268,12 @@ export const pageFragment = /* groq */ `
     ${seoFragment}
   },
 `;
+
+export const homepageHeroFragment = /* groq */ `
+  homePageHero {
+    image,
+    heading,
+    subtitle,
+    video
+  }
+`;
