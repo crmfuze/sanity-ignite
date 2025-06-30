@@ -17,7 +17,6 @@ import {
   removeCartId,
   setAuthToken,
 } from './cookies';
-import { retrieveReplicatedSiteInfo } from './distributor';
 
 export const retrieveCustomer = async (): Promise<HttpTypes.StoreCustomer | null> => {
   const authHeaders = await getAuthHeaders();

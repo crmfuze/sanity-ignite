@@ -2,14 +2,12 @@
 
 import { sdk } from '../config';
 import {
-  AdminMlmsoftAccount,
   AdminMlmsoftResponse,
   StoreMlmsoftSearchByInviteCodeResponse,
 } from '@/types/mlmsoft';
 import { getAuthHeaders, getCacheTag, getTrackingId, setAuthToken } from './cookies';
 import { revalidateTag } from 'next/cache';
 import { transferCart } from './customer';
-import { StoreCustomer } from '@medusajs/types';
 
 export const retrieveReplicatedSiteInfo =
   async (): Promise<StoreMlmsoftSearchByInviteCodeResponse | null> => {
