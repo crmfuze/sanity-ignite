@@ -18,6 +18,7 @@ import {
 } from './cookies';
 import { getRegion } from './regions';
 import { getOrSetSalesChannel } from './customer';
+import { AutoshipInterval } from '@/types/autoship';
 
 /**
  * Retrieves a cart by its ID. If no ID is provided, it will use the cart ID from the cookies.
@@ -62,7 +63,7 @@ export async function getOrSetCart(countryCode: string) {
   }
 
   const salesChannel = await getOrSetSalesChannel();
-  
+
   if (!salesChannel?.id) {
     throw new Error('Sales channel not found');
   }
@@ -77,10 +78,10 @@ export async function getOrSetCart(countryCode: string) {
 
   if (!cart) {
     const cartResp = await sdk.store.cart.create(
-      { 
-        region_id: region.id, 
+      {
+        region_id: region.id,
         sales_channel_id: salesChannel.id,
-        metadata: { ...trackingId } 
+        metadata: { ...trackingId },
       },
       {},
       headers,
@@ -95,16 +96,16 @@ export async function getOrSetCart(countryCode: string) {
 
   if (
     cart &&
-    (cart?.region_id !== region.id || 
-     cart?.metadata?.tracking_id !== trackingId.tracking_id ||
-     cart?.sales_channel_id !== salesChannel.id)
+    (cart?.region_id !== region.id ||
+      cart?.metadata?.tracking_id !== trackingId.tracking_id ||
+      cart?.sales_channel_id !== salesChannel.id)
   ) {
     await sdk.store.cart.update(
       cart.id,
-      { 
-        region_id: region.id, 
+      {
+        region_id: region.id,
         sales_channel_id: salesChannel.id,
-        metadata: { ...trackingId } 
+        metadata: { ...trackingId },
       },
       {},
       headers,
@@ -494,4 +495,24 @@ export async function listCartOptions() {
     headers,
     cache: 'no-cache',
   });
+}
+
+export async function updateAutoshipData(
+  autoship_interval: AutoshipInterval,
+  autoship_period: number,
+) {
+  const cartId = getCartId();
+
+  if (!cartId) {
+    throw new Error('No existing cart found when placing an order');
+  }
+
+  await updateCart({
+    metadata: {
+      autoship_interval,
+      autoship_period,
+    },
+  });
+
+  revalidateTag('cart');
 }
