@@ -128,8 +128,19 @@ export async function updateCart(data: HttpTypes.StoreUpdateCart) {
     ...(await getAuthHeaders()),
   };
 
+  const trackingId = await getTrackingId();
+
+  // Ensure tracking_id is always included in metadata
+  const updateData = {
+    ...data,
+    metadata: {
+      ...trackingId,
+      ...data.metadata,
+    },
+  };
+
   return sdk.store.cart
-    .update(cartId, data, {}, headers)
+    .update(cartId, updateData, {}, headers)
     .then(async ({ cart }) => {
       const cartCacheTag = await getCacheTag('carts');
       revalidateTag(cartCacheTag);
@@ -146,10 +157,12 @@ export async function addToCart({
   variantId,
   quantity,
   countryCode,
+  metadata,
 }: {
   variantId: string;
   quantity: number;
   countryCode: string;
+  metadata?: Record<string, any>;
 }) {
   if (!variantId) {
     throw new Error('Missing variant ID when adding to cart');
@@ -171,6 +184,7 @@ export async function addToCart({
       {
         variant_id: variantId,
         quantity,
+        metadata,
       },
       {},
       headers,

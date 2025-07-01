@@ -35,7 +35,7 @@ export const getTrackingId = async (): Promise<{ tracking_id: string } | {}> => 
     const parts = host.split('.');
 
     if (parts.length < 3) {
-      return {};
+      return {tracking_id: "default"};
     }
 
     return { tracking_id: parts[0] };

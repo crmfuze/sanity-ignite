@@ -12,6 +12,11 @@ type ItemProps = {
 };
 
 const Item = ({ item, currencyCode }: ItemProps) => {
+  // Extract autoship metadata with proper typing
+  const autoshipPeriod = String(item.metadata?.autoship_period || '1');
+  const autoshipInterval = String(item.metadata?.autoship_interval || 'monthly');
+  const isAutoship = item.metadata?.autoship as boolean;
+
   return (
     <Table.Row className="w-full" data-testid="product-row">
       <Table.Cell className="!pl-0 p-4 w-24">
@@ -25,6 +30,11 @@ const Item = ({ item, currencyCode }: ItemProps) => {
           {item.product_title}
         </Text>
         <LineItemOptions variant={item.variant} data-testid="product-variant" />
+        {isAutoship && (
+          <Text className="text-xs text-ui-fg-muted mt-1">
+            {`Delivers every ${autoshipPeriod} ${autoshipInterval}`}
+          </Text>
+        )}
       </Table.Cell>
 
       <Table.Cell className="!pr-0">

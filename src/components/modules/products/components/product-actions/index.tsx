@@ -8,6 +8,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { addToCart } from '@/lib/medusa/data/cart';
 import { useIntersection } from '@/lib/medusa/hooks/use-in-view';
+import { AutoshipInterval } from '@/types/autoship';
 import Divider from '@/components/modules/common/components/divider';
 import OptionSelect from '@/components/modules/products/components/product-actions/option-select';
 
@@ -30,6 +31,7 @@ const optionsAsKeymap = (variantOptions: HttpTypes.StoreProductVariant['options'
 export default function ProductActions({ product, disabled }: ProductActionsProps) {
   const [options, setOptions] = useState<Record<string, string | undefined>>({});
   const [isAdding, setIsAdding] = useState(false);
+  const [purchaseType, setPurchaseType] = useState<'one-time' | 'subscription'>('one-time');
   const countryCode = useParams().countryCode as string;
 
   // If there is only 1 variant, preselect the options
@@ -98,10 +100,19 @@ export default function ProductActions({ product, disabled }: ProductActionsProp
 
     setIsAdding(true);
 
+    const metadata = purchaseType === 'subscription' 
+      ? {
+          autoship: true,
+          autoship_interval: AutoshipInterval.MONTHLY,
+          autoship_period: 1,
+        }
+      : undefined;
+
     await addToCart({
       variantId: selectedVariant.id,
       quantity: 1,
       countryCode,
+      metadata,
     });
 
     setIsAdding(false);
@@ -134,6 +145,35 @@ export default function ProductActions({ product, disabled }: ProductActionsProp
 
         <ProductPrice product={product} variant={selectedVariant} />
 
+        {/* Purchase Type Selection */}
+        <div className="flex flex-col gap-y-3">
+          <span className="text-sm">Purchase Type</span>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setPurchaseType('one-time')}
+              className={`flex-1 border rounded-rounded p-2 text-sm transition-all ${
+                purchaseType === 'one-time'
+                  ? 'border-ui-border-interactive bg-ui-bg-base'
+                  : 'border-ui-border-base bg-ui-bg-subtle hover:bg-ui-bg-base'
+              }`}
+              disabled={disabled || isAdding}
+            >
+              One-time Purchase
+            </button>
+            <button
+              onClick={() => setPurchaseType('subscription')}
+              className={`flex-1 border rounded-rounded p-2 text-sm transition-all ${
+                purchaseType === 'subscription'
+                  ? 'border-ui-border-interactive bg-ui-bg-base'
+                  : 'border-ui-border-base bg-ui-bg-subtle hover:bg-ui-bg-base'
+              }`}
+              disabled={disabled || isAdding}
+            >
+              Subscribe & Save
+            </button>
+          </div>
+        </div>
+
         <Button
           onClick={handleAddToCart}
           disabled={!inStock || !selectedVariant || !!disabled || isAdding || !isValidVariant}
@@ -146,7 +186,9 @@ export default function ProductActions({ product, disabled }: ProductActionsProp
             ? 'Select variant'
             : !inStock || !isValidVariant
               ? 'Out of stock'
-              : 'Add to cart'}
+              : purchaseType === 'subscription'
+                ? 'Subscribe Now'
+                : 'Add to cart'}
         </Button>
         <MobileActions
           product={product}

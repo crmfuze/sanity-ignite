@@ -71,6 +71,11 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
           {item.product_title}
         </Text>
         <LineItemOptions variant={item.variant} data-testid="product-variant" />
+        {item.metadata?.autoship && (
+          <Text className="text-xs text-ui-fg-muted mt-1">
+            Delivers every {item.metadata?.autoship_period as string} {item.metadata?.autoship_interval as string}
+          </Text>
+        )}
       </Table.Cell>
 
       {type === "full" && (
