@@ -7,6 +7,9 @@ import { SeoType } from '@/types/seo';
 import { getRegion } from '@/lib/medusa/data/regions';
 import { getOrSetSalesChannel } from '@/lib/medusa/data/customer';
 import HomeTemplate from '@/components/modules/home/templates';
+import { getProductByHandle, listProducts } from '@/lib/medusa/data/products';
+import ShopAllSection from '@/components/modules/home/components/shopAllSection';
+import { getCollectionByHandle } from '@/lib/medusa/data/collections';
 
 export async function generateMetadata() {
   const { data: homePage } = await sanityFetch({
@@ -37,10 +40,33 @@ export default async function Page(props: { params: Promise<{ countryCode: strin
   }
 
   const { _id, _type, pageSections } = homePage;
+  
+  const { response: { products }, nextPage } = await listProducts({
+    countryCode,
+    regionId: region.id,
+    sales_channel_id: salesChannel.id,
+    queryParams: {
+      limit: 7
+    },
+  });
+
+  const featuredCollection = await getCollectionByHandle('featured-products');
+  let featuredProducts: any[] = [];
+  if (featuredCollection?.products?.length) {
+    featuredProducts = await Promise.all(
+      featuredCollection.products.map(async (product) => {
+        return await getProductByHandle(product.handle, region.id, salesChannel.id);
+      })
+    );
+  }
 
   return (
     <>
-      <HomeTemplate homepage={homePage}/>
+      <HomeTemplate 
+      homepage={homePage}
+      products={products}
+      featuredProducts={featuredProducts}
+      />
       <PageSections
         documentId={_id}
         documentType={_type}
