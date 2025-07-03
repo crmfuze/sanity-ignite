@@ -44,7 +44,7 @@ const SpecialOfferSection = ({
                   </span>
                   {(product.variants?.[0]?.calculated_price?.original_amount ?? 0) && (
                     <span className="text-sm text-gray-500 line-through">
-                      ${product.variants?.[0]?.calculated_price?.original_amount}
+                      ${(product.variants?.[0]?.calculated_price?.original_amount ?? 0) * 2}
                     </span>
                   )}
                 </div>

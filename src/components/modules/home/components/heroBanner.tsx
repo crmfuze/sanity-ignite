@@ -26,17 +26,17 @@ const HeroBanner = ({
   secondaryCtaText = "Watch Now",
   secondaryCtaLink = "/about",
   imageUrl,
-  overlayColor = "rgba(255, 255, 255, 0.9)",
-  textColor = "#2d3748",
+  overlayColor = "rgba(255, 255, 255, 0.4)",
+  textColor = "#000000",
   videoUrl,
   spanishUrl,
   showVideoButton = true,
 }: HeroBannerProps) => {
   return (
-    <div className="relative w-full h-[500px] bg-background overflow-hidden">
+    <div className="relative w-full h-[500px] bg-contain overflow-hidden">
       {/* Background Image */}
       <div
-        className="absolute inset-0 w-full h-full bg-contain bg-center bg-no-repeat"
+        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${imageUrl})` }}
       >
         {/* Overlay */}
@@ -67,9 +67,8 @@ const HeroBanner = ({
             <Dialog>
               <DialogTrigger asChild>
                 <Button
-                  variant="outline"
                   size="lg"
-                  className="font-medium bg-transparent border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-white px-8"
+                  className='bg-[#9B37AE] text-white font-bold tracking-normal font-inter hover:bg-purple-800 transition'
                 >
                   <Play className="mr-2 h-4 w-4" />
                   {secondaryCtaText}
