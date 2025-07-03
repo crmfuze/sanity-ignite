@@ -4,6 +4,7 @@ import { footerQuery } from '@/lib/sanity/queries/queries';
 // import { Button } from '../ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
+import PartnerPortalLink from './PartnerPortalLink';
 
 export default async function Footer() {
   const { data: footerData } = await sanityFetch({
@@ -64,10 +65,10 @@ export default async function Footer() {
           </div>
           <div>
             <h3 className="font-inter font-semibold text-[13px] leading-[30px] tracking-[0px] mb-2">
-              {footerData?.patnerProgramsLinks?.sectionTitle}
+              {footerData?.partnerProgramsLinks?.sectionTitle}
             </h3>
             <ul className="space-y-1 font-poppins font-normal text-[13px] leading-[30px] tracking-[0px] text-[#434343]">
-              {footerData?.patnerProgramsLinks?.links?.map((link, i: number) =>
+              {footerData?.partnerProgramsLinks?.links?.map((link: any, i: number) =>
                 link.text && link.url ? (
                   <li key={i}>
                     <Link href={link.url} target={link.isExternal ? '_blank' : '_self'}>
@@ -76,6 +77,11 @@ export default async function Footer() {
                   </li>
                 ) : null,
               )}
+              <li>
+                <PartnerPortalLink>
+                  Partner Portal
+                </PartnerPortalLink>
+              </li>
             </ul>
           </div>
           <div>

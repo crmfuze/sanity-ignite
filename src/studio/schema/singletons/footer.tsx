@@ -113,8 +113,8 @@ export default defineType({
       ],
     }),
     defineField({
-      name: 'patnerProgramsLinks',
-      title: 'Patner Programs Links',
+      name: 'partnerProgramsLinks',
+      title: 'Partner Programs Links',
       type: 'object',
       fields: [
         {
