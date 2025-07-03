@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { requestOTP } from '@/lib/medusa/data/distributor';
+import { requestOTP, checkEmailExists, checkInviteCodeAvailable } from '@/lib/medusa/data/distributor';
 import Input from '@/components/modules/common/components/input';
 import NativeSelect from '@/components/modules/common/components/native-select';
 import LocalizedClientLink from '@/components/modules/common/components/localized-client-link';
@@ -21,12 +21,14 @@ const DistributorRegister = () => {
     password: '',
     confirmPassword: '',
     phone: '',
+    inviteCode: '',
   });
 
   const handleRequestOtp = async () => {
     if (
       !email ||
       !language ||
+      !formData.inviteCode ||
       !formData.firstName ||
       !formData.lastName ||
       !formData.password ||
@@ -45,6 +47,32 @@ const DistributorRegister = () => {
     setOtpError('');
 
     try {
+      // Check if invite code is available
+      const inviteCodeCheckResult = await checkInviteCodeAvailable(formData.inviteCode);
+      if (!inviteCodeCheckResult.success) {
+        const errorMsg = inviteCodeCheckResult.error || 'Failed to verify invite code';
+        setOtpError(typeof errorMsg === 'string' ? errorMsg : 'Failed to verify invite code');
+        return;
+      }
+
+      if (!inviteCodeCheckResult.available) {
+        setOtpError('Invite code is already taken. Please choose a different invite code.');
+        return;
+      }
+
+      // Check if email already exists in ERP
+      const emailCheckResult = await checkEmailExists(email);
+      if (!emailCheckResult.success) {
+        const errorMsg = emailCheckResult.error || 'Failed to verify email';
+        setOtpError(typeof errorMsg === 'string' ? errorMsg : 'Failed to verify email');
+        return;
+      }
+
+      if (emailCheckResult.exists) {
+        setOtpError('Email already exists in our system. Please use a different email address.');
+        return;
+      }
+
       const result = await requestOTP(email, language);
       if (result.success) {
         setRequestId(result.payload?.requestId || result.requestId);
@@ -55,7 +83,7 @@ const DistributorRegister = () => {
           result.error?.data?.message ||
           result.error ||
           'Failed to send OTP';
-        setOtpError(errorMessage);
+        setOtpError(typeof errorMessage === 'string' ? errorMessage : 'Failed to send OTP');
       }
     } catch {
       setOtpError('Failed to send OTP');
@@ -140,6 +168,15 @@ const DistributorRegister = () => {
             data-testid="email-input"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            label="Invite Code"
+            name="invite_code"
+            required
+            type="text"
+            data-testid="invite-code-input"
+            value={formData.inviteCode}
+            onChange={(e) => setFormData({ ...formData, inviteCode: e.target.value })}
           />
           <Input
             label="Phone"

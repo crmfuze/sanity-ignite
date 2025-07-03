@@ -16,6 +16,7 @@ interface OTPVerificationProps {
     lastName: string;
     password: string;
     phone: string;
+    inviteCode: string;
   };
   language: string;
   onBack: () => void;
@@ -64,6 +65,7 @@ const OTPVerification = ({ email, requestId, formData, language, onBack }: OTPVe
           <input type="hidden" name="email" value={email} />
           <input type="hidden" name="phone" value={formData.phone} />
           <input type="hidden" name="language" value={language} />
+          <input type="hidden" name="invite_code" value={formData.inviteCode} />
         </div>
         
         <ErrorMessage error={message} data-testid="otp-verification-error" />

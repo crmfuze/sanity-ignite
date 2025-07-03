@@ -1,10 +1,7 @@
 'use server';
 
 import { sdk } from '../config';
-import {
-  AdminMlmsoftResponse,
-  StoreMlmsoftSearchByInviteCodeResponse,
-} from '@/types/mlmsoft';
+import { AdminMlmsoftResponse, StoreMlmsoftSearchByInviteCodeResponse } from '@/types/mlmsoft';
 import { getAuthHeaders, getCacheTag, getTrackingId, setAuthToken } from './cookies';
 import { revalidateTag } from 'next/cache';
 import { transferCart } from './customer';
@@ -41,6 +38,60 @@ export const retrieveReplicatedSiteInfo =
       .then(({ payload }) => payload)
       .catch(() => null);
   };
+
+// Check if email exists in ERP
+export async function checkEmailExists(email: string) {
+  try {
+    const response = await fetch('https://ambrosia.mlmsoft.cloud/api3/account/check-exists', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    if (!response.ok) {
+      return { success: false, error: 'Failed to check email existence' };
+    }
+
+    const data = await response.json();
+    return { success: true, exists: data.payload?.exists || false };
+  } catch (error: any) {
+    return { success: false, error: error.toString() };
+  }
+}
+
+// Check if invite code is unique (available)
+export async function checkInviteCodeAvailable(inviteCode: string) {
+  try {
+    const response = await fetch(
+      `https://ambrosia.mlmsoft.cloud/api3/account/search/by-invite-code?inviteCode=${encodeURIComponent(inviteCode)}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    const data = await response.json();
+
+    // If success is true, invite code is taken (not available)
+    if (data.success) {
+      return { success: true, available: false };
+    }
+
+    // If success is false, invite code is not taken (available)
+    if (!data.success) {
+      return { success: true, available: true };
+    }
+
+    // Other errors
+    return { success: false, error: data.error?.description || 'Failed to check invite code' };
+  } catch (error: any) {
+    return { success: false, error: error.toString() };
+  }
+}
 
 // OTP request to ERP
 export async function requestOTP(email: string, language: string) {
@@ -94,6 +145,7 @@ export async function distributorSignup(_currentState: unknown, formData: FormDa
   const otpCode = formData.get('otp_code') as string;
   const requestId = formData.get('request_id') as string;
   const language = formData.get('language') as string;
+  const inviteCode = formData.get('invite_code') as string;
 
   const replicated_site_info = await retrieveReplicatedSiteInfo();
 
@@ -128,6 +180,7 @@ export async function distributorSignup(_currentState: unknown, formData: FormDa
           lastname: formData.get('last_name') as string,
           phone: formData.get('phone') as string,
           language_id: language,
+          invite_code: inviteCode,
         },
       }),
     });
