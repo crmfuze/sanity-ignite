@@ -65,16 +65,12 @@ export default function ScienceBanner({ section }: { section: ScienceBannerSecti
             {section.scienceBlock.benefits.map((benefit, index) => {
               if (!benefit?.title) return null;
               
-              const rawIconName = benefit?.icon?.icon?.name;
-              
-              // Clean the icon name by removing invisible Unicode characters
-              const cleanIconName = rawIconName 
-                ? rawIconName.replace(/[\u200B-\u200F\uFEFF\u202A-\u202E\u2060-\u2064\u2066-\u206F\u0000-\u001F\u007F-\u009F]/g, '').trim()
-                : '';
+              // Get the icon name directly from the new schema
+              const iconName = benefit?.iconName || 'Check';
               
               // Get the icon component, fallback to Check if not found
-              const IconComponent = cleanIconName && cleanIconName in LucideIcons 
-                ? (LucideIcons as any)[cleanIconName] 
+              const IconComponent = iconName && iconName in LucideIcons 
+                ? (LucideIcons as any)[iconName] 
                 : LucideIcons.Check;
               
               return (

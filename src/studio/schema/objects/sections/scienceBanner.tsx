@@ -1,7 +1,5 @@
 import { defineField, defineType } from 'sanity';
 import { Microscope } from 'lucide-react';
-import { preview } from 'sanity-plugin-icon-picker';
-import { options } from '../icons';
 
 export default defineType({
   name: 'scienceBanner',
@@ -64,17 +62,23 @@ export default defineType({
                   title: 'Title',
                 }),
                 defineField({
-                  name: 'icon',
-                  type: 'icons',
+                  name: 'iconName',
+                  type: 'string',
+                  title: 'Icon Name',
+                  description: 'Enter a Lucide icon name (e.g., "Check", "Star", "Heart")',
+                  placeholder: 'Check',
                 }),
               ],
               preview: {
                 select: {
                   title: 'title',
-                  icon: 'icon.icon',
+                  iconName: 'iconName',
                 },
-                prepare({ title, icon }) {
-                  return { title, media: preview({ ...icon, options }) };
+                prepare({ title, iconName }) {
+                  return { 
+                    title: title || 'Untitled', 
+                    subtitle: iconName ? `Icon: ${iconName}` : 'No icon'
+                  };
                 },
               },
             }),

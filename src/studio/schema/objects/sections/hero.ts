@@ -25,11 +25,7 @@ export default defineType({
     defineField({
       name: 'heading',
       type: 'string',
-      validation: (Rule) =>
-        Rule.custom((value, { parent }) => {
-          const parentType = parent as { mediaType?: string };
-          return parentType?.mediaType === 'video' || value ? true : 'Required for non-video heroes';
-        }),
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       hidden: ({ parent }) => parent?.mediaType !== 'image',
@@ -48,33 +44,21 @@ export default defineType({
           title: 'Alternative text',
         }),
       ],
-      validation: (Rule) =>
-        Rule.custom((value, { parent }) => {
-          const parentType = parent as { mediaType?: string };
-          return parentType?.mediaType === 'image' && !value ? 'Required' : true;
-        }),
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       hidden: ({ parent }) => parent?.mediaType !== 'largeImage',
       name: 'largeImage',
       title: 'Large Image',
       type: 'image',
-      validation: (Rule) =>
-        Rule.custom((value, { parent }) => {
-          const parentType = parent as { mediaType?: string };
-          return parentType?.mediaType === 'largeImage' && !value ? 'Required' : true;
-        }),
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       hidden: ({ parent }) => parent?.mediaType !== 'video',
       name: 'video',
       title: 'Video',
       type: 'video',
-      validation: (Rule) =>
-        Rule.custom((value, { parent }) => {
-          const parentType = parent as { mediaType?: string };
-          return parentType?.mediaType === 'video' && !value ? 'Required' : true;
-        }),
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       hidden: ({ parent }) => parent?.mediaType !== 'video',
@@ -95,14 +79,7 @@ export default defineType({
       name: 'buttons',
       type: 'array',
       of: [{ type: 'button' }],
-      validation: (Rule) =>
-        Rule.custom((value, { parent }) => {
-          const parentType = parent as { mediaType?: string };
-          if (parentType?.mediaType === 'video') {
-            return !value || value.length <= 4 ? true : 'Maximum 4 buttons for video heroes';
-          }
-          return value && value.length >= 2 && value.length <= 4 ? true : 'Requires 2-4 buttons for non-video heroes';
-        }),
+      validation: (Rule) => Rule.min(1).max(4),
     }),
   ],
   preview: {

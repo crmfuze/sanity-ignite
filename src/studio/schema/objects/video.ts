@@ -1,11 +1,11 @@
-import { CiVideoOn } from 'react-icons/ci';
+import { Video } from 'lucide-react';
 import { defineField, defineType } from 'sanity';
 
 export default defineType({
   name: 'video',
   title: 'Video',
   type: 'object',
-  icon: CiVideoOn,
+  icon: Video,
   fields: [
     defineField({
       name: 'url',

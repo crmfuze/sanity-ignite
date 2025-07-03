@@ -20,7 +20,6 @@ import { assist } from '@sanity/assist';
 import { clientEnv } from '@/env/clientEnv';
 
 // Plugins
-import { iconPicker } from 'sanity-plugin-icon-picker';
 
 // Define the home location for the presentation tool
 const homeLocation = {
@@ -124,7 +123,6 @@ export default defineConfig({
     // Additional plugins for enhanced functionality
     assist(),
     visionTool(),
-    iconPicker(),
   ],
   schema: {
     types: schemaTypes,

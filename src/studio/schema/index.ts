@@ -18,7 +18,6 @@ import footer from './singletons/footer';
 import product from './documents/product';
 import featuredProducts from './objects/sections/featuredProducts';
 import scienceBanner from './objects/sections/scienceBanner';
-import icons from './objects/icons';
 import video from './objects/video';
 
 export const schemaTypes = [
@@ -47,7 +46,6 @@ export const schemaTypes = [
   link,
   button,
   menuItem,
-  icons,
   video,
   ...seoTypes,
 
