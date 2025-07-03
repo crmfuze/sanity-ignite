@@ -31,7 +31,7 @@ const ProductCard = ({
           {product.description}
         </p>
         <div className="mt-2 flex items-center justify-between">
-          <span className="font-bold text-lg">{product.variants?.[0]?.calculated_price?.original_amount}</span>
+          <span className="font-bold text-lg">${product.variants?.[0]?.calculated_price?.original_amount}</span>
         </div>
       </CardContent>
 
