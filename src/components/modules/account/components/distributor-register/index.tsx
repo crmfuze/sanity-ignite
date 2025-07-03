@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import { requestOTP, checkEmailExists, checkInviteCodeAvailable } from '@/lib/medusa/data/distributor';
+import { validatePassword, getPasswordRequirements } from '@/lib/medusa/util/password-validation';
 import Input from '@/components/modules/common/components/input';
 import NativeSelect from '@/components/modules/common/components/native-select';
 import LocalizedClientLink from '@/components/modules/common/components/localized-client-link';
@@ -14,6 +15,7 @@ const DistributorRegister = () => {
   const [email, setEmail] = useState('');
   const [language, setLanguage] = useState('');
   const [otpError, setOtpError] = useState('');
+  const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
   const [isRequestingOtp, setIsRequestingOtp] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -35,6 +37,14 @@ const DistributorRegister = () => {
       !formData.phone
     ) {
       setOtpError('Please fill in all required fields');
+      return;
+    }
+
+    // Validate password requirements
+    const passwordValidation = validatePassword(formData.password);
+    if (!passwordValidation.isValid) {
+      setPasswordErrors(passwordValidation.errors);
+      setOtpError('Please fix password requirements');
       return;
     }
 
@@ -142,17 +152,26 @@ const DistributorRegister = () => {
             name="password"
             required
             type="password"
-            minLength={9}
+            minLength={8}
             autoComplete="new-password"
             data-testid="password-input"
             value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            onChange={(e) => {
+              const newPassword = e.target.value;
+              setFormData({ ...formData, password: newPassword });
+              if (newPassword) {
+                const validation = validatePassword(newPassword);
+                setPasswordErrors(validation.errors);
+              } else {
+                setPasswordErrors([]);
+              }
+            }}
           />
           <Input
             label="Confirm Password"
             name="confirm_password"
             required
-            minLength={9}
+            minLength={8}
             type="password"
             autoComplete="new-password"
             data-testid="confirm-password-input"
@@ -176,7 +195,7 @@ const DistributorRegister = () => {
             type="text"
             data-testid="invite-code-input"
             value={formData.inviteCode}
-            onChange={(e) => setFormData({ ...formData, inviteCode: e.target.value })}
+            onChange={(e) => setFormData({ ...formData, inviteCode: e.target.value.toLowerCase() })}
           />
           <Input
             label="Phone"
@@ -203,6 +222,37 @@ const DistributorRegister = () => {
           </div>
 
           <div className="flex flex-col gap-2">
+            {passwordErrors.length > 0 && (
+              <div className="text-sm">
+                <p className="text-gray-600 mb-2">Password requirements:</p>
+                <ul className="space-y-1">
+                  {getPasswordRequirements().map((requirement, index) => {
+                    let isMet = false;
+                    
+                    if (requirement.includes('8 characters')) {
+                      isMet = !passwordErrors.some(e => e.includes('8 characters'));
+                    } else if (requirement.includes('uppercase')) {
+                      isMet = !passwordErrors.some(e => e.includes('uppercase'));
+                    } else if (requirement.includes('lowercase')) {
+                      isMet = !passwordErrors.some(e => e.includes('lowercase'));
+                    } else if (requirement.includes('number')) {
+                      isMet = !passwordErrors.some(e => e.includes('number'));
+                    } else if (requirement.includes('special')) {
+                      isMet = !passwordErrors.some(e => e.includes('special'));
+                    }
+                    
+                    return (
+                      <li key={index} className={`text-xs flex items-center gap-2 ${
+                        isMet ? 'text-green-500' : 'text-red-500'
+                      }`}>
+                        <span className="text-xs">{isMet ? '✓' : '✗'}</span>
+                        {requirement}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
             {otpError && <span className="text-red-500 text-sm">{otpError}</span>}
             <button
               type="button"

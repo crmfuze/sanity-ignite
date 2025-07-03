@@ -239,3 +239,26 @@ export async function distributorSignup(_currentState: unknown, formData: FormDa
     return typeof error === 'string' ? error : error.toString();
   }
 }
+
+// MLMsoft SSO function
+export async function mlmsoftSSO() {
+  try {
+    const authHeaders = await getAuthHeaders();
+
+    if (!authHeaders) {
+      return { message: 'Unauthorized' };
+    }
+
+    const response = await sdk.client.fetch<{
+      mlmsoft_access_token: string;
+      mlmsoft_refresh_token: string;
+    }>('/store/customers/me/mlmsoft/sso', {
+      method: 'GET',
+      headers: authHeaders,
+    });
+
+    return response;
+  } catch (error: any) {
+    return { message: 'Unauthorized' };
+  }
+}
