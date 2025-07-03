@@ -50,6 +50,8 @@ export default async function Page(props: { params: Promise<{ countryCode: strin
     },
   });
 
+  const displayProducts = products.filter((p) => p.tags?.some((t) => t.value === "shop-all"));
+
   const featuredCollection = await getCollectionByHandle('featured-products');
   let featuredProducts: any[] = [];
   if (featuredCollection?.products?.length) {
@@ -64,7 +66,7 @@ export default async function Page(props: { params: Promise<{ countryCode: strin
     <>
       <HomeTemplate 
       homepage={homePage}
-      products={products}
+      products={displayProducts}
       featuredProducts={featuredProducts}
       />
       <PageSections
