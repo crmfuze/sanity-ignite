@@ -4,6 +4,7 @@ import {
   menuFragment,
   pageBuilderFragment,
   homepageHeroFragment,
+  productVideoFragment,
 } from './fragments/fragments';
 
 export const settingsQuery = defineQuery(`*[_type == "settings" && _id == "siteSettings"][0]{

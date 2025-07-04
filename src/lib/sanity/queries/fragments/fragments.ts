@@ -277,3 +277,13 @@ export const homepageHeroFragment = /* groq */ `
     video
   }
 `;
+
+export const productVideoFragment = /* groq */ `
+  productVideoSection {
+    title,
+    thumbnailUrl,
+    heading, 
+    subheading,
+    video
+  }
+`;

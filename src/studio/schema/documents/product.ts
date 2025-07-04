@@ -41,6 +41,19 @@ export default defineType({
       type: 'array',
     },
     {
+      name: 'productVideo',
+      title: 'Product Video',
+      group: 'content',
+      type: 'object',
+      fields: [
+        { name: 'title', title: 'Video Title', type: 'string' },
+        { name: 'thumbnail', title: 'Video Thumbnail', type: 'image' },
+        { name: 'heading', title: 'Heading', type: 'string' },
+        { name: 'subheading', title: 'Subheading', type: 'string' },
+        { name: 'video', title: 'Video', type: 'video' },
+      ],
+    },
+    {
       name: 'ingredients',
       group: 'content',
       title: 'Product Ingredients',

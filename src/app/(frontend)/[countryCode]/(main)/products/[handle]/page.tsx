@@ -8,6 +8,7 @@ import { productPageQuery } from '@/lib/sanity/queries/queries';
 import ProductIngredients from '@/components/modules/products/templates/product-ingredients';
 import PageSections from '@/components/sections/PageSections';
 import { getOrSetSalesChannel } from '@/lib/medusa/data/customer';
+import ProductVideoSection from '@/components/sections/productVideoSection';
 
 type Props = {
   params: Promise<{ countryCode: string; handle: string }>;
@@ -47,8 +48,7 @@ export async function generateStaticParams() {
       .filter((param) => param.handle);
   } catch (error) {
     console.error(
-      `Failed to generate static paths for product pages: ${
-        error instanceof Error ? error.message : 'Unknown error'
+      `Failed to generate static paths for product pages: ${error instanceof Error ? error.message : 'Unknown error'
       }.`,
     );
     return [];
@@ -65,11 +65,11 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   }
 
   const salesChannel = await getOrSetSalesChannel();
-  
+
   if (!salesChannel?.id) {
     notFound();
   }
-  
+
   const product = await getProductByHandle(handle, region.id, salesChannel.id);
 
   if (!product) {
@@ -97,11 +97,11 @@ export default async function ProductPage(props: Props) {
   }
 
   const salesChannel = await getOrSetSalesChannel();
-  
+
   if (!salesChannel?.id) {
     notFound();
   }
-  
+
   const pricedProduct = await getProductByHandle(params.handle, region.id, salesChannel.id);
 
   if (!pricedProduct) {
@@ -117,17 +117,26 @@ export default async function ProductPage(props: Props) {
     notFound();
   }
 
-  const { _id, _type, ingredients, pageSections } = content;
+  const { _id, _type, ingredients, pageSections, productVideo } = content;
 
   return (
     <div>
       <ProductTemplate product={pricedProduct} region={region} countryCode={params.countryCode} />
+      {productVideo?.video && (
+        <ProductVideoSection
+          title={productVideo.title}
+          thumbnail={productVideo.thumbnail}
+          heading={productVideo.heading}
+          subheading={productVideo.subheading}
+          video={productVideo.video}
+        />
+      )}
       {ingredients && <ProductIngredients product={pricedProduct} ingredients={ingredients} />}
-      <PageSections 
-        documentId={_id} 
-        documentType={_type} 
-        sections={pageSections} 
-        region={region} 
+      <PageSections
+        documentId={_id}
+        documentType={_type}
+        sections={pageSections}
+        region={region}
         salesChannelId={salesChannel.id}
       />
     </div>
